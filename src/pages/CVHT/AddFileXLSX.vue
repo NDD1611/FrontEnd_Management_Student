@@ -34,6 +34,8 @@ export default {
         },
         async handleClickSubmitFile() {
             try {
+                let malop = JSON.parse(sessionStorage.getItem('infoLogin')).malop
+                // console.log(malop)
                 if (this.dataFile.length) {
                     // console.log(this.dataFile)
                     let headFile = this.dataFile[0];
@@ -58,19 +60,21 @@ export default {
                             jobPa: '',
                             jobMe: '',
                             addressPa: '',
-                            addressMe: ''
+                            addressMe: '',
+                            malop: ''
                         }
                         for (let j = 0; j < headFile.length; j++) {
                             svObj[headFile[j]] = rowFile[j];
                         }
-                        console.log(svObj)
+                        // console.log(svObj)
+                        svObj.malop = malop
                         await Service.createOneSv(svObj)
                     }
                 }
                 alert("Thêm Danh Sách Thành Công")
             } catch (err) {
                 alert("Đã xảy ra lỗi")
-                cốnle.log("error AddFileXLSX", err)
+                console.log("error AddFileXLSX", err)
             }
         }
     }

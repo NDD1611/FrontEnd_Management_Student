@@ -2,6 +2,10 @@
 export default {
 
   beforeMount() {
+    let infoLogin = JSON.parse(sessionStorage.getItem('infoLogin'))
+    if (!infoLogin) {
+      this.$router.replace("/login")
+    }
   }
 }
 </script>

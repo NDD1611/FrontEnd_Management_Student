@@ -3,6 +3,7 @@
 import Menu from "../../component/Menu.vue"
 import HeadContent from "../../component/HeadContent.vue";
 import Service from "../../service/Service.js"
+import { mapMutations } from "vuex";
 export default {
     data() {
         return {
@@ -16,9 +17,37 @@ export default {
     async created() {
         let res = await Service.getAllStudent()
         this.lists = res.data;
-        console.log("create", this.lists)
+        for (let sv of this.lists) {
+            if (sv.gender == 1) {
+                sv.gender = "Nam"
+            } else if (sv.gender == 2) {
+                sv.gender = "Nữ"
+            } else {
+                sv.gender = "Khác"
+            }
+        }
     },
     mounted() {
+    },
+    methods: {
+        ...mapMutations(['setDataViewSv', 'setDataEditSv']),
+        handleClickViewSV: function (sv) {
+            this.setDataViewSv(sv)
+            this.$router.push("viewsv")
+        },
+        handleClickEditSv(sv) {
+            this.setDataEditSv(sv)
+            this.$router.push("editsv")
+        },
+        async handleDeleteSv(sv) {
+            let res = await Service.deleteSv(sv._id)
+            if (res) {
+                if (res.errCode == 0) {
+                    alert("Delete Success")
+                    window.location.reload()
+                }
+            }
+        }
     }
 }
 </script>
@@ -53,32 +82,18 @@ export default {
                             <td class="column_7">{{ sv.tinchi }}</td>
                             <td class="column_8 ">
                                 <div class="btns">
-                                    <div class="btn">
+                                    <div class="btn" @click="handleClickViewSV(sv)">
                                         <i class="fa-solid fa-eye btn_eye"></i>
                                     </div>
-                                    <div class="btn">
+                                    <div class="btn" @click="handleClickEditSv(sv)">
                                         <i class="fa-solid fa-pen-to-square btn_edit"></i>
                                     </div>
-                                    <div class="btn">
+                                    <div class="btn" @click="handleDeleteSv(sv)">
                                         <i class="fa-solid fa-trash-can btn_delete"></i>
                                     </div>
                                 </div>
                             </td>
                         </tr>
-                        <!-- <tr>
-                            <td class="column_1">fsdf</td>
-                            <td class="column_2">fsfds</td>
-                            <td class="column_3">fsdfs</td>
-                            <td class="column_4">vcxv</td>
-                            <td class="column_5">AT3, CLD, ST</td>
-                            <td class="column_6">3.4</td>
-                            <td class="column_7">77</td>
-                            <td class="column_8">
-                                <button>xem</button>
-                                <button>sua</button>
-                                <button>xoa</button>
-                            </td>
-                        </tr> -->
                     </tbody>
                 </table>
             </div>
@@ -165,6 +180,7 @@ export default {
                         display: flex;
 
                         .btn {
+                            cursor: pointer;
                             display: flex;
                             justify-content: center;
                             padding: 5px;

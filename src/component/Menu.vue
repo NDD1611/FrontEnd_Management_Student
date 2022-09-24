@@ -5,8 +5,11 @@ export default {
         return {
         }
     },
+    computed: {
+        ...mapGetters(['isShowDropDownCVHT', 'isShowDropDownSV', 'isShowDropDownAccount', 'isShowText', 'getCurrentMenu'])
+    },
     methods: {
-        ...mapMutations(['setIsShowDropDownCVHT', 'closeMenu', 'openMenu', 'setCurrentMenu']),
+        ...mapMutations(['setIsShowDropDownCVHT', 'setIsShowDropDownSV', 'setIsShowDropDownAccount', 'closeMenu', 'openMenu', 'setCurrentMenu', "setDataEditSv", "setDataViewSv"]),
         openClick() {
             this.openMenu()
             let menu = document.getElementById("Menu")
@@ -25,13 +28,52 @@ export default {
         },
         clickCurrentMenu(className) {
             this.setCurrentMenu(className)
+        },
+        handleClickCVHT() {
+            let infoLogin = JSON.parse(sessionStorage.getItem('infoLogin'))
+            if (infoLogin) {
+                if (infoLogin.role === 'teacher' || infoLogin.role === 'admin') {
+                    this.setIsShowDropDownCVHT('drop_down_cvht')
+                } else {
+                    alert("Bạn Không có quyền truy cập vào đây")
+                }
+            } else {
+                alert("Bạn chưa đăng nhập. Vui lòng đăng nhập")
+                this.$router.replace({ path: "/login" })
+            }
+        },
+        handleClickSV() {
+            let infoLogin = JSON.parse(sessionStorage.getItem('infoLogin'))
+            if (infoLogin) {
+                if (infoLogin.role === 'student') {
+                    this.setIsShowDropDownSV('drop_down_sv')
+                } else {
+                    alert("Bạn Không có quyền truy cập vào đây")
+                }
+            } else {
+                alert("Bạn chưa đăng nhập. Vui lòng đăng nhập")
+                this.$router.replace({ path: "/login" })
+            }
+        },
+        handleClickAccount() {
+            this.setIsShowDropDownAccount('drop_down_account')
+        },
+        clickUpdateSv(str) {
+            let infoLogin = JSON.parse(sessionStorage.getItem("infoLogin"))
+            // console.log(str, infoLogin)
+            this.setDataEditSv(infoLogin)
+        },
+        clickViewSv(str) {
+            let infoLogin = JSON.parse(sessionStorage.getItem("infoLogin"))
+            this.setDataViewSv(infoLogin)
+        },
+        logOut() {
+            sessionStorage.removeItem('infoLogin')
+            this.$router.replace('/login')
         }
     },
-    computed: {
-        ...mapGetters(['isShowDropDownCVHT', 'isShowText', 'getCurrentMenu'])
-    },
     mounted() {
-        console.log(this.getCurrentMenu)
+        // console.log(this.getCurrentMenu)
     }
 
 }
@@ -53,20 +95,21 @@ export default {
         </div>
         <div class="borderUnder" :class="this.isShowText == false ? 'justify_content_center' : ''">
             <i class="fa-solid fa-house"></i>
-            <router-link to="/" class="home_js" @click="clickCurrentMenu('home_js')">
+            <router-link to="/" class="home_js hover_color" @click="clickCurrentMenu('home_js')">
                 <div v-if="this.isShowText">
                     Trang Chủ
                 </div>
             </router-link>
         </div>
-        <div class="borderUnder cvht_js" :class="this.isShowText == false ? 'justify_content_center' : ''"
-            @click="setIsShowDropDownCVHT('drop_down_cvht')">
+        <div class="borderUnder cvht_js hover_color" :class="this.isShowText == false ? 'justify_content_center' : ''"
+            @click="handleClickCVHT()">
             <i class="fa-solid fa-user-tie"></i>
             <div v-if="this.isShowText">
                 Cố Vấn
             </div>
             <i class="fa-solid fa-angle-down iconRight" v-if="this.isShowText"></i>
         </div>
+
         <div class="drop_down_cvht dropDown" v-if="this.isShowDropDownCVHT">
             <div class="link_to">
                 <router-link to="/cvht/list" class="listSv_js" @click="clickCurrentMenu('listSv_js')">
@@ -81,23 +124,64 @@ export default {
                 </router-link>
             </div>
         </div>
-        <div class="borderUnder" :class="this.isShowText == false ? 'justify_content_center' : ''">
+
+
+        <div class="borderUnder hover_color" :class="this.isShowText == false ? 'justify_content_center' : ''"
+            @click="handleClickSV('drop_down_sv')">
             <i class="fa-solid fa-user-tie"></i>
             <div v-if="this.isShowText">
                 Sinh Viên
             </div>
             <i class="fa-solid fa-angle-down iconRight" v-if="this.isShowText"></i>
         </div>
-        <div class="borderUnder" :class="this.isShowText == false ? 'justify_content_center' : ''">
+
+        <div class="drop_down_cvht dropDown" v-if="this.isShowDropDownSV">
+            <div class="link_to hover_color">
+                <router-link to="/sv/view" class="listSv_js hover_color" @click="clickViewSv('listSv_js')">
+                    <i class="fa-solid fa-chevron-right"></i>
+                    Thông Tin
+                </router-link>
+            </div>
+            <div class="link_to hover_color">
+                <router-link to="/sv/editsv" class="addnew_js hover_color" @click="clickUpdateSv('addnew_js')">
+                    <i class="fa-solid fa-chevron-right"></i>
+                    Cập Nhật Thông Tin
+                </router-link>
+            </div>
+        </div>
+
+
+        <!-- <div class="borderUnder" :class="this.isShowText == false ? 'justify_content_center' : ''"> -->
+        <router-link to="/announce" class="borderUnder underline_node hover_color"
+            :class="this.isShowText == false ? 'justify_content_center' : ''">
             <i class="fa-solid fa-bullhorn"></i>
             <div v-if="this.isShowText">
                 Thông Báo
             </div>
-        </div>
-        <div class="borderUnder" :class="this.isShowText == false ? 'justify_content_center' : ''">
+        </router-link>
+        <!-- </div> -->
+
+        <div class="borderUnder hover_color" :class="this.isShowText == false ? 'justify_content_center' : ''"
+            @click="handleClickAccount('drop_down_account')">
             <i class="fa-solid fa-gear"></i>
             <div v-if="this.isShowText">
                 Tài Khoản
+            </div>
+            <i class="fa-solid fa-angle-down iconRight" v-if="this.isShowText"></i>
+        </div>
+
+        <div class="drop_down_cvht dropDown" v-if="this.isShowDropDownAccount">
+            <div class="link_to">
+                <div class="listSv_js hover_color">
+                    <i class="fa-solid fa-chevron-right"></i>
+                    Đổi mật khẩu
+                </div>
+            </div>
+            <div class="link_to">
+                <div class="addnew_js hover_color" @click="logOut()">
+                    <i class="fa-solid fa-chevron-right"></i>
+                    Đăng Xuất
+                </div>
             </div>
         </div>
     </div>
@@ -106,9 +190,21 @@ export default {
 <style lang="scss" scoped>
 #Menu {
 
+    .underline_node {
+        text-decoration: none;
+    }
+
     width: 250px;
     background-color: #042954;
     height: 100%;
+
+    .hover_color {
+        cursor: pointer;
+
+        &:hover {
+            color: #fdc500 !important;
+        }
+    }
 
     .centerText {
         display: flex;

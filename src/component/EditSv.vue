@@ -1,7 +1,8 @@
 <script>
 
-import Menu from "../../component/Menu.vue"
-import Service from "../../service/Service.js"
+import Menu from "./Menu.vue"
+import Service from "../service/Service.js"
+import { mapGetters } from "vuex";
 export default {
     data() {
         return {
@@ -23,8 +24,7 @@ export default {
                 jobPa: '',
                 jobMe: '',
                 addressPa: '',
-                addressMe: '',
-                malop: ''
+                addressMe: ''
             }
         }
     },
@@ -32,12 +32,13 @@ export default {
         Menu,
     },
     methods: {
-        async handleSave() {
-            let malop = JSON.parse(sessionStorage.getItem('infoLogin')).malop
-            this.info.malop = malop
-            let res = await Service.createOneSv(this.info)
+        async handleEdit() {
+            let res = await Service.editSv(this.info)
+
             if (res) {
-                alert(res.mes)
+                if (res.errCode == 0) {
+                    alert("Update Success")
+                }
             }
         },
         handleReset() {
@@ -62,10 +63,23 @@ export default {
                 addressMe: ''
             }
         }
+    },
+    computed: {
+        ...mapGetters(['getDataEditSv'])
+    },
+    mounted() {
+        this.info = this.getDataEditSv
+        if (this.info.gender == "Nam") {
+            this.info.gender = 1;
+        } else if (this.info.gender == "Nữ") {
+            this.info.gender = 2
+        } else {
+            this.info.gender = 3
+        }
     }
 }
 </script>
-
+    
 <template>
     <div id="addNewSinnhVien">
         <div class="nav">
@@ -77,15 +91,12 @@ export default {
                     <div class="head_left">
                         Thông Tin Sinh Viên:
                     </div>
-                    <div class="head_right">
-                        <span>Nhập Danh Sách Từ File Excel: </span>
-                        <router-link class="import_file" to="/cvht/addlist">Nhập</router-link>
-                    </div>
                 </div>
                 <div class="info_student">
                     <div class="div_form">
                         <label for="masv">Mã Sinh Viên:</label>
-                        <input v-model="this.info.masv" type="text" placeholder="Nhập mã sinh viên..." id="masv" />
+                        <input v-model="this.info.masv" type="text" placeholder="Nhập mã sinh viên..." id="masv"
+                            disabled />
                     </div>
                     <div class="div_form">
                         <label for="name">Tên:</label>
@@ -164,14 +175,14 @@ export default {
                     </div>
                 </div>
                 <div class="submit">
-                    <button class="save" @click="handleSave()">Lưu</button>
+                    <button class="save" @click="handleEdit()">Lưu Thay Đổi</button>
                     <button class="reset" @click="handleReset()">Hủy Bỏ</button>
                 </div>
             </div>
         </div>
     </div>
 </template>
-
+    
 <style lang="scss" scoped>
 #addNewSinnhVien {
     display: flex;
@@ -190,16 +201,6 @@ export default {
                 justify-content: space-between;
                 border-bottom: 1px solid #ccc;
                 padding: 20px;
-
-                .head_right {
-                    a {
-                        margin-left: 10px;
-                        padding: 10px 20px;
-                        text-decoration: none;
-                        color: #fff;
-                        background-color: #042954;
-                    }
-                }
             }
 
             .title {
