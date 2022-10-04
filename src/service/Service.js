@@ -10,8 +10,9 @@ let createOneSv = async (sv) => {
     }
 }
 
-let getAllStudent = async () => {
-    let res = await axios.get("/cvht/getallstudent")
+let getAllStudentLop = async (malop) => {
+    // console.log(malop)
+    let res = await axios.post("/cvht/getallstudentlop", { malop: malop })
     return res
 }
 
@@ -25,9 +26,9 @@ let editSv = async (sv) => {
     }
 }
 
-let deleteSv = async (id) => {
+let deleteSv = async (data) => {
     try {
-        let res = await axios.post("/cvht/deletesv", { id: id })
+        let res = await axios.post("/cvht/deletesv", data)
         return res
     } catch (err) {
         console.log(err)
@@ -46,18 +47,50 @@ let Login = async (info) => {
 let createAccount = async (data) => {
     try {
         let res = await axios.post("/admin/createaccount", data)
-        console.log(res)
+        // console.log(res)
         alert(res.mes)
     } catch (err) {
         alert("Đã Có Lỗi Xảy Ra")
     }
 }
 
+let changePass = async (info) => {
+    try {
+        let res = await axios.post("/changepass", info)
+        // console.log(res)
+    } catch (err) {
+        alert("Đã Có Lỗi Xảy Ra")
+    }
+}
+
+// cap nhat thong tin cua co van hoc tap
+let updateInfoCVHT = async (info) => {
+    try {
+        let res = await axios.post('/cvht/editcvht', info)
+        return res
+    } catch (err) {
+        console.log("Error Srevice Front", err)
+
+    }
+}
+
+let addClass = async (info) => {
+    try {
+        let res = await axios.post("/cvht/addclass", info)
+        return res
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 export default {
     createOneSv,
-    getAllStudent,
+    getAllStudentLop,
     editSv,
     deleteSv,
     Login,
-    createAccount
+    createAccount,
+    changePass,
+    updateInfoCVHT,
+    addClass,
 }

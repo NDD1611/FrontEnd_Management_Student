@@ -2,7 +2,7 @@
 
 import Menu from "./Menu.vue"
 import Service from "../service/Service.js"
-import { mapGetters } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 export default {
     data() {
         return {
@@ -32,12 +32,14 @@ export default {
         Menu,
     },
     methods: {
+        ...mapMutations(['showToast']),
         async handleEdit() {
             let res = await Service.editSv(this.info)
 
             if (res) {
                 if (res.errCode == 0) {
-                    alert("Update Success")
+                    this.showToast({ type: "success", mes: "Cập Nhật Thông Tin Sinh Viên Thành Công" })
+                    this.$router.replace('/cvht/list')
                 }
             }
         },

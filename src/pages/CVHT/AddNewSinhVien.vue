@@ -2,6 +2,7 @@
 
 import Menu from "../../component/Menu.vue"
 import Service from "../../service/Service.js"
+import { mapMutations } from "vuex"
 export default {
     data() {
         return {
@@ -25,19 +26,36 @@ export default {
                 addressPa: '',
                 addressMe: '',
                 malop: ''
-            }
+            },
+            listClass: []
         }
     },
     components: {
         Menu,
     },
+    beforeMount() {
+        this.listClass = JSON.parse(sessionStorage.getItem('listClass'))
+        this.info.malop = this.listClass[0].malop
+        // console.log(this.listClass)
+    },
     methods: {
+        ...mapMutations(['showToast']),
         async handleSave() {
-            let malop = JSON.parse(sessionStorage.getItem('infoLogin')).malop
-            this.info.malop = malop
             let res = await Service.createOneSv(this.info)
             if (res) {
-                alert(res.mes)
+                if (res.errCode == 0) {
+                    let info = {
+                        type: 'success',
+                        mes: 'Thêm mới sinh viên thành công'
+                    }
+                    this.showToast(info)
+                } else {
+                    let info = {
+                        type: 'error',
+                        mes: res.mes
+                    }
+                    this.showToast(info)
+                }
             }
         },
         handleReset() {
@@ -96,12 +114,23 @@ export default {
                         <input v-model="this.info.date" type="text" placeholder="dd/mm/yyyy" id="date" />
                     </div>
                     <div class="div_form">
-                        <label for="gender">Giới Tính:</label>
-                        <select v-model="this.info.gender" id="gender">
-                            <option value="1" selected>Nam</option>
-                            <option value="2">Nữ</option>
-                            <option value="3">Khác</option>
-                        </select>
+                        <div class="gender_malop">
+                            <div class="gender">
+                                <label for="gender">Giới Tính:</label>
+                                <select v-model="this.info.gender" id="gender">
+                                    <option value="1" selected>Nam</option>
+                                    <option value="2">Nữ</option>
+                                    <option value="3">Khác</option>
+                                </select>
+                            </div>
+                            <div class="malop">
+                                <label for="malop">Mã Lớp:</label>
+                                <select v-model="this.info.malop" id="malop">
+                                    <option v-for="lop in this.listClass" :value="lop.malop" selected>{{lop.malop}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     <div class="div_form">
                         <label for="email">Email:</label>
@@ -229,6 +258,19 @@ export default {
 
                 .div_form {
                     width: 30%;
+
+                    .gender_malop {
+                        display: flex;
+
+                        .gender {
+                            flex: 1;
+                        }
+
+                        .malop {
+                            flex:
+                                1;
+                        }
+                    }
 
                     select {
                         width: 80%;

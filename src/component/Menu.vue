@@ -3,27 +3,35 @@ import { mapGetters, mapMutations } from 'vuex'
 export default {
     data() {
         return {
+            isShowChangePass: false
         }
     },
     computed: {
         ...mapGetters(['isShowDropDownCVHT', 'isShowDropDownSV', 'isShowDropDownAccount', 'isShowText', 'getCurrentMenu'])
     },
     methods: {
-        ...mapMutations(['setIsShowDropDownCVHT', 'setIsShowDropDownSV', 'setIsShowDropDownAccount', 'closeMenu', 'openMenu', 'setCurrentMenu', "setDataEditSv", "setDataViewSv"]),
+        ...mapMutations(["showToast", 'setIsShowDropDownCVHT', 'setIsShowDropDownSV', 'setIsShowDropDownAccount', 'closeMenu', 'openMenu', 'setCurrentMenu', "setDataEditSv", "setDataViewSv"]),
         openClick() {
+
             this.openMenu()
             let menu = document.getElementById("Menu")
+            let nav = document.querySelector(".nav_back")
             if (menu) {
                 menu.classList.add("openMenu")
                 menu.classList.remove("closeMenu")
+                nav.classList.add("openNav")
+                nav.classList.remove("closeNav")
             }
         },
         closeClick() {
             this.closeMenu()
             let menu = document.getElementById("Menu")
+            let nav = document.querySelector(".nav_back")
             if (menu) {
                 menu.classList.remove("openMenu")
                 menu.classList.add("closeMenu")
+                nav.classList.remove("openNav")
+                nav.classList.add("closeNav")
             }
         },
         clickCurrentMenu(className) {
@@ -35,7 +43,12 @@ export default {
                 if (infoLogin.role === 'teacher' || infoLogin.role === 'admin') {
                     this.setIsShowDropDownCVHT('drop_down_cvht')
                 } else {
-                    alert("Bạn Không có quyền truy cập vào đây")
+                    let infoToast = {
+                        type: "warning",
+                        mes: "Bạn Không có quyền truy cập vào đây"
+                    }
+                    this.showToast(infoToast)
+                    // alert("Bạn Không có quyền truy cập vào đây")
                 }
             } else {
                 alert("Bạn chưa đăng nhập. Vui lòng đăng nhập")
@@ -48,7 +61,12 @@ export default {
                 if (infoLogin.role === 'student') {
                     this.setIsShowDropDownSV('drop_down_sv')
                 } else {
-                    alert("Bạn Không có quyền truy cập vào đây")
+                    let infoToast = {
+                        type: "warning",
+                        mes: "Bạn Không có quyền truy cập vào đây"
+                    }
+                    this.showToast(infoToast)
+                    // alert("Bạn Không có quyền truy cập vào đây")
                 }
             } else {
                 alert("Bạn chưa đăng nhập. Vui lòng đăng nhập")
@@ -68,8 +86,11 @@ export default {
             this.setDataViewSv(infoLogin)
         },
         logOut() {
-            sessionStorage.removeItem('infoLogin')
+            sessionStorage.clear()
             this.$router.replace('/login')
+        },
+        changePassword() {
+            this.$router.replace("/changepass")
         }
     },
     mounted() {
@@ -81,14 +102,15 @@ export default {
 <!-- :style="{ width: '50px' }" -->
  <!-- :class="this.isShowText == false ? 'closeMenu' : 'openMenu'" -->
 <template>
+    <div class="nav_back"></div>
     <div id="Menu">
-        <div :class="this.isShowText == false ? 'centerText' : 'head'">
+        <div :class="this.isShowText == false ? 'centerText' : 'head'" id="SHOWMENU">
             <div class="left" v-if="this.isShowText">MENU</div>
             <div class="right">
-                <div class="openMenu" @click="() => { openClick() }" v-if="!this.isShowText">
+                <div class="openMenu" v-if="!this.isShowText" @click="openClick()">
                     <i class="fa-solid fa-bars"></i>
                 </div>
-                <div class="closeMenu" @click="() => { closeClick() }" v-if="this.isShowText">
+                <div class="closeMenu" @click="closeClick()" v-if="this.isShowText">
                     <i class="fa-solid fa-xmark"></i>
                 </div>
             </div>
@@ -112,13 +134,31 @@ export default {
 
         <div class="drop_down_cvht dropDown" v-if="this.isShowDropDownCVHT">
             <div class="link_to">
-                <router-link to="/cvht/list" class="listSv_js" @click="clickCurrentMenu('listSv_js')">
+                <router-link to="/cvht/list" class="listSv_js hover_color" @click="clickCurrentMenu('listSv_js')">
+                    <i class="fa-solid fa-chevron-right"></i>
+                    Thông tin
+                </router-link>
+            </div>
+            <div class="link_to">
+                <router-link to="/cvht/updateinfo" class="listSv_js hover_color" @click="clickCurrentMenu('listSv_js')">
+                    <i class="fa-solid fa-chevron-right"></i>
+                    Cập nhật thông tin
+                </router-link>
+            </div>
+            <div class="link_to">
+                <router-link to="/cvht/addclass" class="listSv_js hover_color" @click="clickCurrentMenu('listSv_js')">
+                    <i class="fa-solid fa-chevron-right"></i>
+                    Thêm Lớp Học
+                </router-link>
+            </div>
+            <div class="link_to">
+                <router-link to="/cvht/list" class="listSv_js hover_color" @click="clickCurrentMenu('listSv_js')">
                     <i class="fa-solid fa-chevron-right"></i>
                     Danh Sách Sinh Viên
                 </router-link>
             </div>
             <div class="link_to">
-                <router-link to="/cvht/addSv" class="addnew_js" @click="clickCurrentMenu('addnew_js')">
+                <router-link to="/cvht/addSv" class="addnew_js hover_color" @click="clickCurrentMenu('addnew_js')">
                     <i class="fa-solid fa-chevron-right"></i>
                     Thêm Mới Sinh Viên
                 </router-link>
@@ -172,7 +212,7 @@ export default {
 
         <div class="drop_down_cvht dropDown" v-if="this.isShowDropDownAccount">
             <div class="link_to">
-                <div class="listSv_js hover_color">
+                <div class="listSv_js hover_color" @click="changePassword()">
                     <i class="fa-solid fa-chevron-right"></i>
                     Đổi mật khẩu
                 </div>
@@ -188,6 +228,40 @@ export default {
 </template>
 
 <style lang="scss" scoped>
+.nav_back {
+    width: 250px;
+}
+
+.closeNav {
+    text-align: center;
+    animation: closeNav 0.3s linear forwards;
+}
+
+.openNav {
+    text-align: center;
+    animation: openNav 0.3s linear forwards;
+}
+
+@keyframes closeNav {
+    from {
+        width: 250px;
+    }
+
+    to {
+        width: 50px;
+    }
+}
+
+@keyframes openNav {
+    from {
+        width: 50px;
+    }
+
+    to {
+        width: 250px;
+    }
+}
+
 #Menu {
 
     .underline_node {
@@ -196,7 +270,10 @@ export default {
 
     width: 250px;
     background-color: #042954;
-    height: 100%;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
 
     .hover_color {
         cursor: pointer;
@@ -207,10 +284,11 @@ export default {
     }
 
     .centerText {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        // display: flex;
+        // align-items: center;
+        // justify-content: center;
         height: 50px;
+        width: 100%;
         background-color: #fdc500;
         color: #fff;
         align-items: center;
@@ -223,14 +301,16 @@ export default {
     }
 
     &.closeMenu {
-        text-align: center;
         animation: closeMenu 0.3s linear forwards;
     }
 
     &.openMenu {
+        width: 100%;
+        height: 100%;
         text-align: center;
         animation: openMenu 0.3s linear forwards;
     }
+
 
     .dropDown {
         padding: 10px 0 10px 20px;
@@ -346,5 +426,6 @@ export default {
             opacity: 1;
         }
     }
+
 }
 </style>

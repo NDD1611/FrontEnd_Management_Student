@@ -3,20 +3,40 @@
 import Menu from "../../component/Menu.vue"
 import HeadContent from "../../component/HeadContent.vue";
 import Service from "../../service/Service.js"
+import HeadRight from "../../component/HeadRight.vue"
 import { mapMutations } from "vuex";
 export default {
     data() {
         return {
-            lists: []
+            lists: [],
+            coData: false,
+            currentClass: ''
         }
     },
     components: {
         Menu,
-        HeadContent
+        HeadContent,
+        HeadRight
+    },
+    emits() {
+
     },
     async created() {
-        let res = await Service.getAllStudent()
+        this.listClass = JSON.parse(sessionStorage.getItem('listClass'))
+        let current = JSON.parse(sessionStorage.getItem('currentClass'))
+        if (current) {
+            this.currentClass = current
+        } else {
+            this.currentClass = this.listClass.malop
+        }
+        let res = await Service.getAllStudentLop(this.currentClass)
+        if (res.data.length != 0) {
+            this.coData = true
+        } else {
+            this.coData = false
+        }
         this.lists = res.data;
+        // console.log(this.lists)
         for (let sv of this.lists) {
             if (sv.gender == 1) {
                 sv.gender = "Nam"
@@ -30,7 +50,7 @@ export default {
     mounted() {
     },
     methods: {
-        ...mapMutations(['setDataViewSv', 'setDataEditSv']),
+        ...mapMutations(['showToast', 'setDataViewSv', 'setDataEditSv']),
         handleClickViewSV: function (sv) {
             this.setDataViewSv(sv)
             this.$router.push("viewsv")
@@ -39,12 +59,35 @@ export default {
             this.setDataEditSv(sv)
             this.$router.push("editsv")
         },
-        async handleDeleteSv(sv) {
-            let res = await Service.deleteSv(sv._id)
+        async handleDeleteSv(sv, index) {
+            // console.log(index, sv)
+            let res = await Service.deleteSv({ id: sv._id, masv: sv.masv })
             if (res) {
                 if (res.errCode == 0) {
-                    alert("Delete Success")
-                    window.location.reload()
+                    this.showToast({ type: 'success', mes: 'Xóa sinh viên thành công' })
+                }
+                for (let i = index; i < this.lists.length - 1; i++) {
+                    this.lists[i] = this.lists[i + 1]
+                }
+                this.lists.length--
+            }
+        },
+        async emitChange(malop) {
+            this.currentClass = malop
+            let res = await Service.getAllStudentLop(this.currentClass)
+            if (res.data.length != 0) {
+                this.coData = true
+            } else (
+                this.coData = false
+            )
+            this.lists = res.data;
+            for (let sv of this.lists) {
+                if (sv.gender == 1) {
+                    sv.gender = "Nam"
+                } else if (sv.gender == 2) {
+                    sv.gender = "Nữ"
+                } else {
+                    sv.gender = "Khác"
                 }
             }
         }
@@ -58,10 +101,15 @@ export default {
             <Menu></Menu>
         </div>
         <div class="right">
-            <!-- <HeadContent></HeadContent> -->
-            <div class="content">
+            <HeadRight @changeClass="emitChange"></HeadRight>
+            <div class="content align_center" v-if="!this.coData">
+                Không Có Dữ Liệu
+            </div>
+            <div class="content" v-if="this.coData">
+                <div class="header_right">Danh Sách Sinh Viên Lớp {{this.lists[0].malop}}</div>
                 <table>
                     <thead>
+                        <th class="column_0">STT</th>
                         <th class="column_1">MSSV</th>
                         <th class="column_2">Tên</th>
                         <th class="column_3">Giới Tính</th>
@@ -73,6 +121,7 @@ export default {
                     </thead>
                     <tbody>
                         <tr v-for="(sv, index) in this.lists" :class="index % 2 == 0 ? 'black' : 'white'">
+                            <td class="column_0">{{ index+1 }}</td>
                             <td class="column_1">{{ sv.masv }}</td>
                             <td class="column_2">{{ sv.name }}</td>
                             <td class="column_3">{{ sv.gender }}</td>
@@ -88,7 +137,7 @@ export default {
                                     <div class="btn" @click="handleClickEditSv(sv)">
                                         <i class="fa-solid fa-pen-to-square btn_edit"></i>
                                     </div>
-                                    <div class="btn" @click="handleDeleteSv(sv)">
+                                    <div class="btn" @click="handleDeleteSv(sv, index)">
                                         <i class="fa-solid fa-trash-can btn_delete"></i>
                                     </div>
                                 </div>
@@ -109,9 +158,19 @@ export default {
     .right {
         width: 100%;
 
+        .align_center {
+            display: flex;
+            justify-content: center;
+        }
+
         .content {
             background-color: #f0f1f3;
             margin: 20px;
+
+            .header_right {
+                padding: 10px;
+                font-size: 20px;
+            }
 
             table {
                 border-spacing: 0;
@@ -141,6 +200,10 @@ export default {
                 td {
                     display: ruby;
                     text-align: center;
+                }
+
+                .column_0 {
+                    padding-left: 10px;
                 }
 
                 .column_1 {

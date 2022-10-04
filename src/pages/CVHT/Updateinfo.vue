@@ -1,83 +1,45 @@
+   
 <script>
-
+import Service from "../../service/Service"
 import Menu from "../../component/Menu.vue"
-import Service from "../../service/Service.js"
-import { mapGetters, mapMutations } from "vuex";
 export default {
-    data() {
-        return {
-            info: {
-                masv: '',
-                name: '',
-                date: '',
-                gender: 1,
-                email: '',
-                address: '',
-                phone: '',
-                role: 'student',
-                diemtb: 0.0,
-                tinchi: 0,
-                namePa: '',
-                nameMe: '',
-                phonePa: '',
-                phoneMe: '',
-                jobPa: '',
-                jobMe: '',
-                addressPa: '',
-                addressMe: ''
-            }
-        }
-    },
     components: {
         Menu,
     },
-    methods: {
-        ...mapMutations(['showToast']),
-        async handleEdit() {
-            let res = await Service.editSv(this.info)
-            if (res) {
-                if (res.errCode == 0) {
-                    this.showToast({ type: "success", mes: "Cập Nhật Thông Tin Sinh Viên Thành Công" })
-                    this.$router.replace('/cvht/list')
-                }
-            }
-            sessionStorage.setItem("infoLogin", JSON.stringify(this.info))
-        },
-        handleReset() {
-            this.info = {
-                masv: '',
+    data() {
+        return {
+            info: {
+                macb: '',
                 name: '',
                 date: '',
                 gender: 1,
                 email: '',
                 address: '',
                 phone: '',
-                role: 'student',
-                diemtb: 0.0,
-                tinchi: 0,
-                namePa: '',
-                nameMe: '',
-                phonePa: '',
-                phoneMe: '',
-                jobPa: '',
-                jobMe: '',
-                addressPa: '',
-                addressMe: ''
+                role: ''
             }
         }
     },
-    computed: {
-        ...mapGetters(['getDataEditSv'])
-    },
     beforeMount() {
-        this.info = JSON.parse(sessionStorage.getItem("infoLogin"))
-        console.log(this.info)
+        this.info = JSON.parse(sessionStorage.getItem('infoLogin'))
+        if (!this.info.gender) {
+            this.info.gender = 1;
+        }
     },
-    mounted() {
+    methods: {
+        async clickSave() {
+            let res = await Service.updateInfoCVHT(this.info)
+            if (res) {
+                if (res.errCode == 0) {
+                    alert("Update Success")
+                }
+            }
+            sessionStorage.setItem("infoLogin", JSON.stringify(this.info))
+        }
     }
 }
 </script>
-        
+
 <template>
     <div id="addNewSinnhVien">
         <div class="nav">
@@ -87,13 +49,13 @@ export default {
             <div class="form">
                 <div class="head">
                     <div class="head_left">
-                        Thông Tin Sinh Viên:
+                        Thông Tin Cố Vấn:
                     </div>
                 </div>
                 <div class="info_student">
                     <div class="div_form">
-                        <label for="masv">Mã Sinh Viên:</label>
-                        <input v-model="this.info.masv" type="text" placeholder="Nhập mã sinh viên..." id="masv"
+                        <label for="masv">Mã Cán Bộ:</label>
+                        <input v-model="this.info.macb" type="text" placeholder="Nhập mã cán bộ..." id="masv"
                             disabled />
                     </div>
                     <div class="div_form">
@@ -124,57 +86,10 @@ export default {
                         <label for="phone">Số Điện Thoại: </label>
                         <input v-model="this.info.phone" type="text" placeholder="Nhập số điện thoại..." id="phone" />
                     </div>
-                    <div class="div_form">
-                        <label for="tb">Điểm Trung Bình Tích Lũy: </label>
-                        <input v-model="this.info.diemtb" type="text" placeholder="Nhập số điện thoại..." id="tb" />
-                    </div>
-                    <div class="div_form">
-                        <label for="tinchi">Số Tín Chỉ Đã Tích Lũy: </label>
-                        <input v-model="this.info.tinchi" type="text" placeholder="Nhập số điện thoại..." id="tinchi" />
-                    </div>
-                </div>
-                <div class="title">Thông Tin Cha Sinh Viên:</div>
-                <div class="info_father">
-                    <div class="div_father">
-                        <label for="namePa">Tên:</label>
-                        <input v-model="this.info.namePa" type="text" placeholder="Nhập Tên..." id="namePa">
-                    </div>
-                    <div class="div_father">
-                        <label for="phonePa">Số Điện Thoại:</label>
-                        <input v-model="this.info.phonePa" type="text" placeholder="Nhập Số Điện Thoại..." id="phonePa">
-                    </div>
-                    <div class="div_father">
-                        <label for="jobPa">Nghề Nghiệp:</label>
-                        <input v-model="this.info.jobPa" type="text" placeholder="Nhập Nghề Nghiệp..." id="jobPa">
-                    </div>
-                    <div class="div_father">
-                        <label for="">Địa Chỉ Liên Lạc:</label>
-                        <input v-model="this.info.addressPa" type="text" placeholder="Nhập Địa Chỉ..." id="">
-                    </div>
-                </div>
-
-                <div class="title">Thông Tin Mẹ Sinh Viên:</div>
-                <div class="info_mother">
-                    <div class="div_mother">
-                        <label for="nameMe">Tên:</label>
-                        <input v-model="this.info.nameMe" type="text" placeholder="Nhập Tên..." id="namee">
-                    </div>
-                    <div class="div_mother">
-                        <label for="phoneMe">Số Điện Thoại:</label>
-                        <input v-model="this.info.phoneMe" type="text" placeholder="Nhập Số Điện Thoại..." id="phoneMe">
-                    </div>
-                    <div class="div_mother">
-                        <label for="jobMe">Nghề Nghiệp:</label>
-                        <input v-model="this.info.jobMe" type="text" placeholder="Nhập Nghề Nghiệp..." id="jobMe">
-                    </div>
-                    <div class="div_mother">
-                        <label for="">Địa Chỉ Liên Lạc:</label>
-                        <input v-model="this.info.addressMe" type="text" placeholder="Nhập Địa Chỉ..." id="">
-                    </div>
                 </div>
                 <div class="submit">
-                    <button class="save" @click="handleEdit()">Lưu Thay Đổi</button>
-                    <button class="reset" @click="handleReset()">Hủy Bỏ</button>
+                    <button class="save" @click="clickSave()">Lưu Thay Đổi</button>
+                    <button class="reset">Hủy Bỏ</button>
                 </div>
             </div>
         </div>

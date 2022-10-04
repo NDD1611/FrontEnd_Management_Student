@@ -55,6 +55,14 @@ export default {
                     </div>
                     <div class="line_detail">
                         <div class="span1">
+                            Mã Lớp:
+                        </div>
+                        <div class="span2">
+                            {{ this.dataV.malop }}
+                        </div>
+                    </div>
+                    <div class="line_detail">
+                        <div class="span1">
                             Tên:
                         </div>
                         <div class="span2">

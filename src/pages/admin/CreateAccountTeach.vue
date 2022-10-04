@@ -4,23 +4,26 @@ import Service from '../../service/Service.js'
 export default {
     data() {
         return {
-            name: '',
             username: '',
             password: '',
-            role: 'admin',
-            malop: ''
+            role: 'teacher',
         }
     },
     methods: {
         async createAccount() {
             let data = {
-                name: this.name,
                 username: this.username,
                 password: this.password,
-                role: this.role,
-                malop: this.malop.toUpperCase()
+                role: this.role
             }
             await Service.createAccount(data)
+        }
+    },
+    beforeMount() {
+        let infoLogin = JSON.parse(sessionStorage.getItem('infoLogin'))
+        if (infoLogin.role != 'admin') {
+            alert("Bạn không có quyền truy cập vào trang này")
+            this.$router.replace("/")
         }
     }
 }
@@ -30,8 +33,6 @@ export default {
     <div id="admin">
         <div class="main">
             <h1>Create Account</h1>
-            <label for="">Họ Và Tên:</label>
-            <input type="text" v-model="this.name">
             <label for="">Tài Khoản:</label>
             <input type="text" v-model="this.username">
             <label for="">Mật Khẩu:</label>
@@ -41,9 +42,6 @@ export default {
                 <option value="admin">Admin</option>
                 <option value="teacher">Teacher</option>
             </select>
-
-            <label for="">Mã Lớp:</label>
-            <input type="text" v-model="this.malop">
             <button @click="createAccount()">Tạo Tài Khoản</button>
         </div>
     </div>

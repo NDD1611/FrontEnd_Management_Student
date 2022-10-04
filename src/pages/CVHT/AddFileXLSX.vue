@@ -2,16 +2,25 @@
 import Menu from "../../component/Menu.vue"
 import * as XLSX from 'xlsx/xlsx.mjs';
 import Service from "../../service/Service.js"
+import { mapGetters, mapMutations } from 'vuex'
+
 export default {
     data() {
         return {
-            dataFile: {}
+            dataFile: {},
+            currentClass: '',
+            listClass: []
         }
     },
     components: {
         Menu
     },
+    created() {
+        this.listClass = JSON.parse(sessionStorage.getItem('listClass'))
+        this.currentClass = this.listClass[0].malop
+    },
     methods: {
+        ...mapMutations(['showToast']),
         onChange(event) {
             this.file = event.target.files ? event.target.files[0] : null;
             if (this.file) {
@@ -34,7 +43,7 @@ export default {
         },
         async handleClickSubmitFile() {
             try {
-                let malop = JSON.parse(sessionStorage.getItem('infoLogin')).malop
+                let malop = this.currentClass
                 // console.log(malop)
                 if (this.dataFile.length) {
                     // console.log(this.dataFile)
@@ -66,14 +75,23 @@ export default {
                         for (let j = 0; j < headFile.length; j++) {
                             svObj[headFile[j]] = rowFile[j];
                         }
-                        // console.log(svObj)
                         svObj.malop = malop
-                        await Service.createOneSv(svObj)
+                        if (svObj.masv) {
+                            await Service.createOneSv(svObj)
+                        }
                     }
                 }
-                alert("Thêm Danh Sách Thành Công")
+                let infoToast = {
+                    type: "success",
+                    mes: "Thêm Danh Sách Thành Công"
+                }
+                this.showToast(infoToast)
             } catch (err) {
-                alert("Đã xảy ra lỗi")
+                let infoToast = {
+                    type: "error",
+                    mes: "Thêm Danh Sách thất bại"
+                }
+                this.showToast(infoToast)
                 console.log("error AddFileXLSX", err)
             }
         }
@@ -124,6 +142,13 @@ export default {
                         <input type="file" id="import_file"
                             accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                             @change="(event) => { onChange(event) }" />
+                        <div class="malop">
+                            <label for="malop">Chọn Lớp Muốn Thêm Sinh Viên Vào::</label>
+                            <select v-model="this.currentClass" id="malop">
+                                <option v-for="lop in this.listClass" :value="lop.malop" selected>{{lop.malop}}
+                                </option>
+                            </select>
+                        </div>
                         <div class="btn">
                             <button @click="handleClickSubmitFile()">Tiến Hành Thêm</button>
                         </div>

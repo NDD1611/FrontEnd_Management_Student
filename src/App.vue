@@ -1,6 +1,11 @@
 <script>
-export default {
 
+import Toast from "./component/Toast.vue"
+export default {
+  components: {
+    Toast
+  }
+  ,
   beforeMount() {
     let infoLogin = JSON.parse(sessionStorage.getItem('infoLogin'))
     if (!infoLogin) {
@@ -11,6 +16,7 @@ export default {
 </script>
 
 <template>
+  <Toast></Toast>
   <RouterView></RouterView>
 </template>
 
@@ -19,5 +25,6 @@ export default {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+
 }
 </style>
