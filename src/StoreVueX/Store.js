@@ -15,7 +15,8 @@ const store = createStore({
             isShowToast: false,
             currentMenu: "",
             dataViewSv: {},
-            dataEditsv: {}
+            dataEditsv: {},
+            listFullHP: []
         }
     },
     mutations: {
@@ -103,8 +104,14 @@ const store = createStore({
         setDataEditSv(state, sv) {
             state.dataEditsv = sv;
         },
+        setListFullHP(state, list) {
+            state.listFullHP = list
+        }
     },
     getters: {
+        getlistFullHP: function (state) {
+            return state.listFullHP
+        },
         isShowToast: function (state) {
             return state.isShowToast
         },

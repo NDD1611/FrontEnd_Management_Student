@@ -130,11 +130,13 @@ export default {
                     </div>
                     <div class="div_form">
                         <label for="tb">Điểm Trung Bình Tích Lũy: </label>
-                        <input v-model="this.info.diemtb" type="text" placeholder="Nhập số điện thoại..." id="tb" />
+                        <input v-model="this.info.diemtb" type="text" placeholder="Nhập số điện thoại..." id="tb"
+                            disabled />
                     </div>
                     <div class="div_form">
                         <label for="tinchi">Số Tín Chỉ Đã Tích Lũy: </label>
-                        <input v-model="this.info.tinchi" type="text" placeholder="Nhập số điện thoại..." id="tinchi" />
+                        <input v-model="this.info.tinchi" type="text" placeholder="Nhập số điện thoại..." id="tinchi"
+                            disabled />
                     </div>
                 </div>
                 <div class="title">Thông Tin Cha Sinh Viên:</div>

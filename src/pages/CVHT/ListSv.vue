@@ -47,8 +47,6 @@ export default {
             }
         }
     },
-    mounted() {
-    },
     methods: {
         ...mapMutations(['showToast', 'setDataViewSv', 'setDataEditSv']),
         handleClickViewSV: function (sv) {
@@ -90,6 +88,12 @@ export default {
                     sv.gender = "Khác"
                 }
             }
+        },
+        xemDiemSV(sv) {
+            let masv = sv.masv
+            console.log(masv)
+            sessionStorage.setItem('masvDiemHK', JSON.stringify(masv))
+            this.$router.replace({ path: "/sv/capnhatdiem" })
         }
     }
 }
@@ -107,29 +111,28 @@ export default {
             </div>
             <div class="content" v-if="this.coData">
                 <div class="header_right">Danh Sách Sinh Viên Lớp {{this.lists[0].malop}}</div>
-                <table>
+                <table class="table">
                     <thead>
-                        <th class="column_0">STT</th>
-                        <th class="column_1">MSSV</th>
-                        <th class="column_2">Tên</th>
-                        <th class="column_3">Giới Tính</th>
-                        <th class="column_4">Ngày Sinh</th>
-                        <th class="column_5">Địa Chỉ</th>
-                        <th class="column_6">Điểm TB</th>
-                        <th class="column_7">Tín Chỉ</th>
-                        <th class="column_8">Button</th>
+                        <th scope="col" class="text-center">STT</th>
+                        <th scope="col" class="text-center">MSSV</th>
+                        <th scope="col" class="text-center">Tên</th>
+                        <th scope="col" class="text-center">Giới Tính</th>
+                        <th scope="col" class="text-center">Ngày Sinh</th>
+                        <th scope="col" class="text-center">Địa Chỉ</th>
+                        <th scope="col" class="text-center">Điểm TB</th>
+                        <th scope="col" class="text-center">Tín Chỉ</th>
                     </thead>
-                    <tbody>
+                    <tbody class="table-group-divider">
                         <tr v-for="(sv, index) in this.lists" :class="index % 2 == 0 ? 'black' : 'white'">
-                            <td class="column_0">{{ index+1 }}</td>
-                            <td class="column_1">{{ sv.masv }}</td>
-                            <td class="column_2">{{ sv.name }}</td>
-                            <td class="column_3">{{ sv.gender }}</td>
-                            <td class="column_4">{{ sv.date }}</td>
-                            <td class="column_5">{{ sv.address }}</td>
-                            <td class="column_6">{{ sv.diemtb }}</td>
-                            <td class="column_7">{{ sv.tinchi }}</td>
-                            <td class="column_8 ">
+                            <td class="text-center">{{ index+1 }}</td>
+                            <td class="text-center">{{ sv.masv }}</td>
+                            <td class="text-center">{{ sv.name }}</td>
+                            <td class="text-center">{{ sv.gender }}</td>
+                            <td class="text-center">{{ sv.date }}</td>
+                            <td class="text-center">{{ sv.address }}</td>
+                            <td class="text-center">{{ sv.diemtb }}</td>
+                            <td class="text-center">{{ sv.tinchi }}</td>
+                            <td class="column_8">
                                 <div class="btns">
                                     <div class="btn" @click="handleClickViewSV(sv)">
                                         <i class="fa-solid fa-eye btn_eye"></i>
@@ -139,6 +142,9 @@ export default {
                                     </div>
                                     <div class="btn" @click="handleDeleteSv(sv, index)">
                                         <i class="fa-solid fa-trash-can btn_delete"></i>
+                                    </div>
+                                    <div class="btn" @click="xemDiemSV(sv)">
+                                        <i class="fa-solid fa-square-poll-horizontal"></i>
                                     </div>
                                 </div>
                             </td>
@@ -173,67 +179,6 @@ export default {
             }
 
             table {
-                border-spacing: 0;
-
-                tbody {
-                    tr {
-                        height: 40px !important;
-                        border: none !important;
-                    }
-
-                    .black {
-                        background-color: #f8f8f8;
-                    }
-
-                    .white {
-                        background-color: #fff;
-                    }
-                }
-
-                thead {
-                    height: 30px;
-                    background-color: #042954;
-                    color: #fff;
-                }
-
-                th,
-                td {
-                    display: ruby;
-                    text-align: center;
-                }
-
-                .column_0 {
-                    padding-left: 10px;
-                }
-
-                .column_1 {
-                    width: 100px;
-                }
-
-                .column_2 {
-                    width: 250px;
-                }
-
-                .column_3 {
-                    width: 100px;
-                }
-
-                .column_4 {
-                    width: 150px;
-                }
-
-                .column_5 {
-                    width: 250px;
-                }
-
-                .column_6 {
-                    width: 100px;
-                }
-
-                .column_7 {
-                    width: 100px;
-                }
-
                 .column_8 {
                     width: 250px;
 

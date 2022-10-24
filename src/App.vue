@@ -1,6 +1,8 @@
 <script>
 
 import Toast from "./component/Toast.vue"
+import '/node_modules/bootstrap/dist/js/bootstrap.min.js'
+
 export default {
   components: {
     Toast
@@ -21,6 +23,8 @@ export default {
 </template>
 
 <style lang="scss">
+@import '/node_modules/bootstrap/dist/css/bootstrap.css';
+
 * {
   box-sizing: border-box;
   padding: 0;

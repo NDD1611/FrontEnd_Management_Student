@@ -14,7 +14,6 @@ export default {
     },
     beforeMount() {
         this.dataV = JSON.parse(sessionStorage.getItem('infoLogin'))
-        console.log(this.dataV)
         if (this.dataV.gender == 1) {
             this.gender = "Nam"
             this.genderIsNam = true
@@ -22,7 +21,6 @@ export default {
             this.gender = "Nữ"
             this.genderIsNam = false
         }
-        // console.log(this.dataV)
     },
     mounted() {
         // this.dataV = this.getDataViewSv
@@ -54,7 +52,7 @@ export default {
                 <div class="detail">
                     <div class="head">
                         <diV>
-                            Thông Tin Sinh Viên
+                            Thông Tin Giáo Viên
                         </diV>
                         <!-- <div class="quay_lai" @click="handleQ()">
                             Quay Lại
@@ -62,26 +60,10 @@ export default {
                     </div>
                     <div class="line_detail">
                         <div class="span1">
-                            Mã Số Sinh Viên:
+                            Mã Số Giáo Viên:
                         </div>
                         <div class="span2">
-                            {{ this.dataV.masv }}
-                        </div>
-                    </div>
-                    <div class="line_detail">
-                        <div class="span1">
-                            Mã Lớp:
-                        </div>
-                        <div class="span2">
-                            {{ this.dataV.malop }}
-                        </div>
-                    </div>
-                    <div class="line_detail">
-                        <div class="span1">
-                            Khóa Học:
-                        </div>
-                        <div class="span2">
-                            {{ this.dataV.khoahoc }}
+                            {{ this.dataV.macb }}
                         </div>
                     </div>
                     <div class="line_detail">
@@ -110,42 +92,10 @@ export default {
                     </div>
                     <div class="line_detail">
                         <div class="span1">
-                            Tên Của Cha:
-                        </div>
-                        <div class="span2">
-                            {{ this.dataV.namePa }}
-                        </div>
-                    </div>
-                    <div class="line_detail">
-                        <div class="span1">
-                            Tên Của Mẹ:
-                        </div>
-                        <div class="span2">
-                            {{ this.dataV.nameMe }}
-                        </div>
-                    </div>
-                    <div class="line_detail">
-                        <div class="span1">
                             Ngày Sinh:
                         </div>
                         <div class="span2">
                             {{ this.dataV.date }}
-                        </div>
-                    </div>
-                    <div class="line_detail">
-                        <div class="span1">
-                            Điểm Trung Bình Tích Lũy:
-                        </div>
-                        <div class="span2">
-                            {{ this.dataV.diemtb }}
-                        </div>
-                    </div>
-                    <div class="line_detail">
-                        <div class="span1">
-                            Số Tín Chỉ Tích Lũy:
-                        </div>
-                        <div class="span2">
-                            {{ this.dataV.tinchi }}
                         </div>
                     </div>
                     <div class="line_detail">
@@ -176,7 +126,7 @@ export default {
     width: 100vw;
 
     .right {
-        border: 1px solid blue;
+        min-height: 100vh;
         width: 100%;
         background-color: #f0f1f3;
 

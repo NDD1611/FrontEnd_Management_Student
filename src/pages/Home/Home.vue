@@ -1,6 +1,5 @@
 <script>
 import Service from "../../service/Service.js"
-import ServiceCVHT from "../../service/ServiceCVHT.js"
 import Menu from "../../component/Menu.vue"
 import ChartPolar from "./ChartPolar.vue"
 import ChartBar from './ChartBar.vue'
@@ -32,7 +31,7 @@ export default {
         let infoLogin = JSON.parse(sessionStorage.getItem('infoLogin'))
         if (infoLogin.role == 'teacher') {
             let macb = infoLogin.macb
-            let res = await ServiceCVHT.getAllClass(macb)
+            let res = await Service.getAllClass(macb)
             if (res) {
                 this.listClass = res.data
                 let current = JSON.parse(sessionStorage.getItem('currentClass'))

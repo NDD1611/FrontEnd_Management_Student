@@ -1,17 +1,27 @@
 <script>
 import { mapGetters } from "vuex";
 import Menu from "./Menu.vue"
+import Service from "../service/Service.js"
 export default {
     data() {
         return {
-            dataV: {}
+            dataV: {},
+            genderIsNam: true
         }
     },
     components: {
         Menu
     },
-    mounted() {
+    async mounted() {
         this.dataV = this.getDataViewSv
+        let fullInfoSv = await Service.getFullInfoSv(this.dataV.masv)
+        this.dataV = fullInfoSv.data
+        console.log(this.dataV)
+        if (this.dataV.gender == 1) {
+            this.genderIsNam = true
+        } else {
+            this.genderIsNam = false
+        }
     },
     computed: {
         ...mapGetters(['getDataViewSv'])
@@ -33,7 +43,8 @@ export default {
             <div class="content">
                 <div class="avatar">
                     <div class="image_avatar">
-                        <img src="../assets/avatar_male.jpg" alt="">
+                        <img v-if="this.genderIsNam" src="../assets/avatar_male.jpg" alt="">
+                        <img v-if="!this.genderIsNam" src="../assets/avatar_female.png" alt="">
                     </div>
                 </div>
                 <div class="detail">
@@ -63,6 +74,14 @@ export default {
                     </div>
                     <div class="line_detail">
                         <div class="span1">
+                            Khóa Học:
+                        </div>
+                        <div class="span2">
+                            {{ this.dataV.khoahoc }}
+                        </div>
+                    </div>
+                    <div class="line_detail">
+                        <div class="span1">
                             Tên:
                         </div>
                         <div class="span2">
@@ -82,7 +101,7 @@ export default {
                             Giới Tính:
                         </div>
                         <div class="span2">
-                            {{ this.dataV.gender }}
+                            {{ this.dataV.gender == 1 ? "Nam" : "Nữ" }}
                         </div>
                     </div>
                     <div class="line_detail">

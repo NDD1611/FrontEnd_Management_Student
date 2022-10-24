@@ -85,7 +85,7 @@ export default {
 
     .toast__close,
     .toast__icon {
-        padding: 0 16px;
+        padding: 0 10px;
         font-size: 24px;
     }
 

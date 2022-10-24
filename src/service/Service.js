@@ -83,6 +83,63 @@ let addClass = async (info) => {
     }
 }
 
+let getFullInfoSv = async (masv) => {
+    try {
+        let res = await axios.post("/getfullinfosv", { masv: masv })
+        return res
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+let themHocPhan = async (data) => {
+    let res = axios.post('/sv/themhp', data)
+    return res
+}
+
+let getDiemHP = async (data) => {
+    let res = axios.post('/getdiemhpt', data)
+    return res
+}
+
+let deleteHP = (hp) => {
+    let res = axios.post('/deletediemhpt', hp)
+    return res
+}
+let getFullHP = (masv) => {
+    let res = axios.post('/getfullhp', { masv })
+    return res
+}
+
+let getAllClass = async (macb) => {
+    let data = await axios.post("/cvht/getclass", { macb })
+    return data
+}
+
+let editLop = async (data) => {
+    let res = await axios.post("/cvht/editlop", data)
+    return res
+}
+let createAnnounce = async (data) => {
+    let res = await axios.post("/createannouce", data)
+    return res
+}
+let getAllAnnounce = async (malop) => {
+    let data = await axios.post("/getallannounce", { malop })
+    return data
+}
+let getInfoCVHTFromMaLop = async (malop) => {
+    let res = await axios.post("/getinfocvhtfrommalop", { malop })
+    return res
+}
+let addDRL = async (data) => {
+    let res = await axios.post("/adddiemrenluyen", data)
+    return res
+}
+let getDiemRL = (data) => {
+    let res = axios.post('/getdiemrenluyen', data)
+    return res
+}
 export default {
     createOneSv,
     getAllStudentLop,
@@ -93,4 +150,16 @@ export default {
     changePass,
     updateInfoCVHT,
     addClass,
+    getFullInfoSv,
+    themHocPhan,
+    getDiemHP,
+    deleteHP,
+    getFullHP,
+    getAllClass,
+    editLop,
+    createAnnounce,
+    getAllAnnounce,
+    getInfoCVHTFromMaLop,
+    addDRL,
+    getDiemRL
 }

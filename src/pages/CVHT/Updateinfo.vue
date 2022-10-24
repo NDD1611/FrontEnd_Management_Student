@@ -2,6 +2,7 @@
 <script>
 import Service from "../../service/Service"
 import Menu from "../../component/Menu.vue"
+import { mapMutations } from 'vuex'
 export default {
     components: {
         Menu,
@@ -27,11 +28,16 @@ export default {
         }
     },
     methods: {
+        ...mapMutations(["showToast"]),
         async clickSave() {
             let res = await Service.updateInfoCVHT(this.info)
             if (res) {
                 if (res.errCode == 0) {
-                    alert("Update Success")
+                    let infoToast = {
+                        type: "success",
+                        mes: "Cập Nhật Thông  Tin Thành Công"
+                    }
+                    this.showToast(infoToast)
                 }
             }
             sessionStorage.setItem("infoLogin", JSON.stringify(this.info))
@@ -49,7 +55,7 @@ export default {
             <div class="form">
                 <div class="head">
                     <div class="head_left">
-                        Thông Tin Cố Vấn:
+                        Cập Nhật Thông Tin Cố Vấn:
                     </div>
                 </div>
                 <div class="info_student">

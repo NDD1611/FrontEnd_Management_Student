@@ -3,7 +3,17 @@ import { mapGetters, mapMutations } from 'vuex'
 export default {
     data() {
         return {
-            isShowChangePass: false
+            isShowChangePass: false,
+            trangchu: false,
+            cv1: false,
+            cv2: false,
+            cv3: false,
+            cv4: false,
+            cv5: false,
+            sv1: false,
+            sv2: false,
+            sv3: false,
+            thongbao: false
         }
     },
     computed: {
@@ -34,8 +44,12 @@ export default {
                 nav.classList.add("closeNav")
             }
         },
-        clickCurrentMenu(className) {
-            this.setCurrentMenu(className)
+        clickCurrentMenu(str) {
+            sessionStorage.setItem("currentmenu", JSON.stringify(str))
+            // this.rerender = false
+            // this.$nextTick(() => {
+            //     this.rerender = true
+            // })
         },
         handleClickCVHT() {
             let infoLogin = JSON.parse(sessionStorage.getItem('infoLogin'))
@@ -78,7 +92,6 @@ export default {
         },
         clickUpdateSv(str) {
             let infoLogin = JSON.parse(sessionStorage.getItem("infoLogin"))
-            // console.log(str, infoLogin)
             this.setDataEditSv(infoLogin)
         },
         clickViewSv(str) {
@@ -91,16 +104,19 @@ export default {
         },
         changePassword() {
             this.$router.replace("/changepass")
+        },
+        xemDiemSV() {
+            let infoLogin = JSON.parse(sessionStorage.getItem('infoLogin'))
+            let masv = infoLogin.masv
+            sessionStorage.setItem('masvDiemHK', JSON.stringify(masv))
         }
-    },
-    mounted() {
-        // console.log(this.getCurrentMenu)
+    }, beforeMount() {
+        let currentmenu = JSON.parse(sessionStorage.getItem('currentmenu'))
+        this[currentmenu] = true
     }
 
 }
 </script>
-<!-- :style="{ width: '50px' }" -->
- <!-- :class="this.isShowText == false ? 'closeMenu' : 'openMenu'" -->
 <template>
     <div class="nav_back"></div>
     <div id="Menu">
@@ -117,7 +133,8 @@ export default {
         </div>
         <div class="borderUnder" :class="this.isShowText == false ? 'justify_content_center' : ''">
             <i class="fa-solid fa-house"></i>
-            <router-link to="/" class="home_js hover_color" @click="clickCurrentMenu('home_js')">
+            <router-link to="/" class="home_js hover_color" :class="this.trangchu ==true ? 'current_menu' : ''"
+                @click="clickCurrentMenu('trangchu')">
                 <div v-if="this.isShowText">
                     Trang Chủ
                 </div>
@@ -134,31 +151,36 @@ export default {
 
         <div class="drop_down_cvht dropDown" v-if="this.isShowDropDownCVHT">
             <div class="link_to">
-                <router-link to="/cvht/list" class="listSv_js hover_color" @click="clickCurrentMenu('listSv_js')">
+                <router-link to="/cvht/viewinfo" class="listSv_js hover_color" :class="this.cv1  ? 'current_menu' : ''"
+                    @click="clickCurrentMenu('cv1')">
                     <i class="fa-solid fa-chevron-right"></i>
                     Thông tin
                 </router-link>
             </div>
             <div class="link_to">
-                <router-link to="/cvht/updateinfo" class="listSv_js hover_color" @click="clickCurrentMenu('listSv_js')">
+                <router-link to="/cvht/updateinfo" class="listSv_js hover_color"
+                    :class="this.cv2  ? 'current_menu' : ''" @click="clickCurrentMenu('cv2')">
                     <i class="fa-solid fa-chevron-right"></i>
                     Cập nhật thông tin
                 </router-link>
             </div>
             <div class="link_to">
-                <router-link to="/cvht/addclass" class="listSv_js hover_color" @click="clickCurrentMenu('listSv_js')">
+                <router-link to="/cvht/addclass" class="listSv_js hover_color" :class="this.cv3  ? 'current_menu' : ''"
+                    @click="clickCurrentMenu('cv3')">
                     <i class="fa-solid fa-chevron-right"></i>
-                    Thêm Lớp Học
+                    Danh Sách Lớp Học
                 </router-link>
             </div>
             <div class="link_to">
-                <router-link to="/cvht/list" class="listSv_js hover_color" @click="clickCurrentMenu('listSv_js')">
+                <router-link to="/cvht/list" class="listSv_js hover_color" :class="this.cv4  ? 'current_menu' : ''"
+                    @click="clickCurrentMenu('cv4')">
                     <i class="fa-solid fa-chevron-right"></i>
                     Danh Sách Sinh Viên
                 </router-link>
             </div>
             <div class="link_to">
-                <router-link to="/cvht/addSv" class="addnew_js hover_color" @click="clickCurrentMenu('addnew_js')">
+                <router-link to="/cvht/addSv" class="addnew_js hover_color" :class="this.cv5  ? 'current_menu' : ''"
+                    @click="clickCurrentMenu('cv5')">
                     <i class="fa-solid fa-chevron-right"></i>
                     Thêm Mới Sinh Viên
                 </router-link>
@@ -177,29 +199,44 @@ export default {
 
         <div class="drop_down_cvht dropDown" v-if="this.isShowDropDownSV">
             <div class="link_to hover_color">
-                <router-link to="/sv/view" class="listSv_js hover_color" @click="clickViewSv('listSv_js')">
+                <router-link to="/sv/view" class="listSv_js hover_color" :class="this.sv1  ? 'current_menu' : ''"
+                    @click="()=>{
+                    clickCurrentMenu('sv1')
+                    clickViewSv('listSv_js')
+                    }">
                     <i class="fa-solid fa-chevron-right"></i>
                     Thông Tin
                 </router-link>
             </div>
             <div class="link_to hover_color">
-                <router-link to="/sv/editsv" class="addnew_js hover_color" @click="clickUpdateSv('addnew_js')">
+                <router-link to="/sv/editsv" class="addnew_js hover_color" :class="this.sv2  ? 'current_menu' : ''"
+                    @click="()=>{
+                    clickCurrentMenu('sv2')
+                    clickUpdateSv('listSv_js')
+                    }">
                     <i class="fa-solid fa-chevron-right"></i>
                     Cập Nhật Thông Tin
                 </router-link>
             </div>
+            <div class="link_to hover_color">
+                <router-link to="/sv/capnhatdiem" class="addnew_js hover_color" :class="this.sv3  ? 'current_menu' : ''"
+                    @click="()=>{
+                    clickCurrentMenu('sv3')
+                    xemDiemSV()
+                    clickUpdateSv('listSv_js')
+                    }">
+                    <i class="fa-solid fa-chevron-right"></i>
+                    Xem Điểm Học Kì
+                </router-link>
+            </div>
         </div>
-
-
-        <!-- <div class="borderUnder" :class="this.isShowText == false ? 'justify_content_center' : ''"> -->
-        <router-link to="/announce" class="borderUnder underline_node hover_color"
+        <router-link to="/announce" class="borderUnder underline_node hover_color" @click="clickCurrentMenu('thongbao')"
             :class="this.isShowText == false ? 'justify_content_center' : ''">
             <i class="fa-solid fa-bullhorn"></i>
-            <div v-if="this.isShowText">
+            <div v-if="this.isShowText" :class="this.thongbao ? 'current_menu':''">
                 Thông Báo
             </div>
         </router-link>
-        <!-- </div> -->
 
         <div class="borderUnder hover_color" :class="this.isShowText == false ? 'justify_content_center' : ''"
             @click="handleClickAccount('drop_down_account')">
@@ -228,6 +265,10 @@ export default {
 </template>
 
 <style lang="scss" scoped>
+.current_menu {
+    color: #fdc500 !important;
+}
+
 .nav_back {
     width: 250px;
 }
@@ -263,6 +304,7 @@ export default {
 }
 
 #Menu {
+
 
     .underline_node {
         text-decoration: none;
@@ -318,7 +360,7 @@ export default {
         border-bottom: 1px solid #ccc;
         background-color: #042954;
         color: #fff;
-        font-size: 15px;
+        // font-size: 15px;
 
         .link_to {
             padding: 5px;

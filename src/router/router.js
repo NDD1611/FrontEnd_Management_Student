@@ -14,22 +14,26 @@ import EditSvLogin from "../pages/SinhVien/EditSvLogin.vue"
 import Announce from "../pages/announce/Announce.vue"
 import ChangePass from "../component/ChangePass.vue"
 import AddClass from "../pages/CVHT/AddClass.vue"
+import ViewCVHT from "../pages/CVHT/ViewCVHT.vue"
+import CapNhatDiem from "../pages/SinhVien/CapNhatDiem.vue"
 
 const routes = [
     { path: "/", component: Home },
     { path: "/cvht/list", component: ListSv },
+    { path: "/cvht/viewinfo", component: ViewCVHT },
     { path: "/cvht/updateinfo", component: Updateinfo },
     { path: "/cvht/addSv", component: AddNewSinhVien },
     { path: "/cvht/addlist", component: AddFileXLSX },
     { path: "/cvht/viewsv", component: ViewSv },
+    { path: "/cvht/addclass", component: AddClass },
     { path: "/cvht/editsv", component: EditSv },
     { path: "/login", component: Login },
     { path: "/admin/createaccount", component: CreateAccountTeach },
     { path: "/sv/editsv", component: EditSvLogin },
     { path: "/sv/view", component: ViewSvLogin },
+    { path: "/sv/capnhatdiem", component: CapNhatDiem },
     { path: "/announce", component: Announce },
     { path: "/changepass", component: ChangePass },
-    { path: "/cvht/addclass", component: AddClass }
 
     // { path: '/:pathMatch(.*)*', component: Notfound }
 ]
