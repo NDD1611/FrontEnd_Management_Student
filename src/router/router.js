@@ -16,6 +16,8 @@ import ChangePass from "../component/ChangePass.vue"
 import AddClass from "../pages/CVHT/AddClass.vue"
 import ViewCVHT from "../pages/CVHT/ViewCVHT.vue"
 import CapNhatDiem from "../pages/SinhVien/CapNhatDiem.vue"
+import AddListHPOneSv from "../pages/SinhVien/AddListHPOneSv.vue"
+import HoatDong from "../pages/SinhVien/HoatDong.vue"
 
 const routes = [
     { path: "/", component: Home },
@@ -34,6 +36,8 @@ const routes = [
     { path: "/sv/capnhatdiem", component: CapNhatDiem },
     { path: "/announce", component: Announce },
     { path: "/changepass", component: ChangePass },
+    { path: "/importlisthponsv", component: AddListHPOneSv },
+    { path: "/sv/capnhathoatdong", component: HoatDong },
 
     // { path: '/:pathMatch(.*)*', component: Notfound }
 ]

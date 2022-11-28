@@ -3,10 +3,11 @@
 import { mapGetters, mapMutations } from 'vuex'
 import Service from "../../service/Service.js"
 import Menu from "../../component/Menu.vue"
+import * as XLSX from 'xlsx/xlsx.mjs'
 export default {
     data() {
         return {
-            infoLogin: {},
+            infoSVCurrent: {},
             arrayYear: [],
             currentYear: '',
             currentHocKi: 1,
@@ -17,7 +18,7 @@ export default {
             nhomhp: '',
             dieukienhp: false,
             listHP: [],
-            // listFullHP: [],
+            listFullHP: [],
             rerender: true,
             tinchiHK: 0,
             tinchiTL: 0,
@@ -35,16 +36,16 @@ export default {
         Menu
     },
     async beforeMount() {
-
         let masv = JSON.parse(sessionStorage.getItem("masvDiemHK"))
         let infoSV = await Service.getFullInfoSv(masv)
-        let infoLogin = infoSV.data
-        this.name = infoLogin.name
+        let infoSVCurrent = infoSV.data
+        sessionStorage.setItem("infoSVCurrent", JSON.stringify(infoSVCurrent))
+        this.name = infoSVCurrent.name
         this.masv = masv
-        this.infoLogin = infoLogin
+        this.infoSVCurrent = infoSVCurrent
         const date = new Date()
         let year = date.getFullYear()
-        let namBD = parseInt(infoLogin.namhoc)
+        let namBD = parseInt(infoSVCurrent.namhoc)
         for (let i = namBD; i <= year; i++) {
             this.arrayYear.push(i)
         }
@@ -58,16 +59,49 @@ export default {
     },
     methods: {
         ...mapMutations(['showToast']),
+        handleClickImport() {
+            this.$router.replace("/importlisthponsv")
+        },
+        exportListHP() {
+            let data = this.listFullHP
+            let dataExport = []
+            let head = ["masv", "diemchu", "diemhp", "dieukien", "hocki", "mahp", "namhoc", "nhomhp", "sotc", "tenhp", "tichluy"]
+            dataExport.push(head)
+            for (let i = 0; i < data.length; i++) {
+                let masv = data[i].masv
+                let diemchu = data[i].diemchu
+                let diemhp = data[i].diemhp
+                let dieukien = data[i].dieukien
+                let hocki = data[i].hocki
+                let mahp = data[i].mahp
+                let namhoc = data[i].namhoc
+                let nhomhp = data[i].nhomhp
+                let sotc = data[i].sotc
+                let tenhp = data[i].tenhp
+                let tichluy = data[i].tichluy
+                let row = [masv, diemchu, diemhp, dieukien, hocki, mahp, namhoc, nhomhp, sotc, tenhp, tichluy]
+                dataExport.push(row)
+            }
+            console.log(dataExport)
+
+            var workbook = XLSX.utils.book_new();
+            var worksheet = XLSX.utils.aoa_to_sheet(dataExport);
+            console.log(worksheet)
+            XLSX.utils.book_append_sheet(workbook, worksheet, "sheet1");
+            console.log(workbook)
+            XLSX.writeFile(workbook, this.masv + ".xlsb");
+        },
         async getDiemHP() {               // lay diem hoc phan theo hoc ki va nam hoc
             let masv = JSON.parse(sessionStorage.getItem("masvDiemHK"))
             let infoSV = await Service.getFullInfoSv(masv)
-            let infoLogin = infoSV.data
+            let infoSVCurrent = infoSV.data
             let data = {
                 namhoc: this.arrayYear[this.currentYear],
                 hocki: this.currentHocKi,
-                masv: infoLogin.masv
+                masv: infoSVCurrent.masv
             }
             let res = await Service.getDiemHP(data)
+            // console.log(res)
             if (res.length == 0) {
                 this.isShowTable = false
             } else {
@@ -83,8 +117,9 @@ export default {
             let arrYear = this.arrayYear
             let curYear = this.arrayYear[this.currentYear]
             let curHK = parseInt(this.currentHocKi)
-            let masv = this.infoLogin.masv
+            let masv = this.infoSVCurrent.masv
             let fullHP = await Service.getFullHP(masv)
+            this.listFullHP = fullHP
             let tongdiem = 0
             for (let hp of fullHP) {
                 let diem4
@@ -179,7 +214,7 @@ export default {
                 tichluy = false
             }
             let data = {
-                masv: this.infoLogin.masv,
+                masv: this.infoSVCurrent.masv,
                 namhoc: namhoc,
                 hocki: parseInt(this.currentHocKi),
                 mahp: this.mahp.toUpperCase(),
@@ -215,8 +250,8 @@ export default {
             this.nhomhp = ''
             this.dieukienhp = false
             this.getDiemHP()
-            let fullinfo = await Service.getFullInfoSv(this.infoLogin.masv)
-            sessionStorage.setItem("infoLogin", JSON.stringify(fullinfo.data))
+            let fullinfo = await Service.getFullInfoSv(this.infoSVCurrent.masv)
+            sessionStorage.setItem("infoSVCurrent", JSON.stringify(fullinfo.data))
             this.caculatorFive()
         },
         handleClickEditHP(hp) {
@@ -225,8 +260,8 @@ export default {
         async handleDeleteHP(hp) {
             let res = await Service.deleteHP(hp)
             this.getDiemHP()
-            let fullinfo = await Service.getFullInfoSv(this.infoLogin.masv)
-            sessionStorage.setItem("infoLogin", JSON.stringify(fullinfo.data))
+            let fullinfo = await Service.getFullInfoSv(this.infoSVCurrent.masv)
+            sessionStorage.setItem("infoSVCurrent", JSON.stringify(fullinfo.data))
             this.rerender = false
             this.$nextTick(() => {
                 this.rerender = true
@@ -273,7 +308,7 @@ export default {
                 hocki: parseInt(this.currentHocKi)
             }
             let res = await Service.getDiemRL(data)
-            console.log(res)
+            // console.log(res)
             if (res) {
                 if (res.data) {
                     this.showDRL = res.data.diemRL
@@ -297,14 +332,14 @@ export default {
         <div class="right">
             <div class="content_right">
                 <div class="head">
-                    Xem Điểm Học Kỳ <span> {{this.name}} - {{this.masv}} </span>
+                    Xem Điểm Học Kỳ <span> {{ this.name }} - {{ this.masv }} </span>
                 </div>
                 <div class="two_select">
                     <div class="select_left">
                         Năm Học
                         <select name="nam" id="choose_nam" v-model="this.currentYear">
                             <option v-for="year, index in this.arrayYear" :value="index">
-                                {{year}} - {{year+1}}
+                                {{ year }} - {{ year + 1 }}
                             </option>
                         </select>
                     </div>
@@ -341,15 +376,15 @@ export default {
                         </thead>
                         <tbody class="table-group-divider">
                             <tr v-for="(hp, index) in this.listHP">
-                                <th scope="row">{{index+1}}</th>
-                                <td>{{hp.mahp}}</td>
-                                <td>{{hp.tenhp}}</td>
-                                <td class="text-center">{{hp.dieukien ? "x" : ''}}</td>
-                                <td class="text-center">{{hp.nhomhp}}</td>
-                                <td class="text-center">{{hp.sotc}}</td>
-                                <td class="text-center">{{hp.diemchu}}</td>
-                                <td class="text-center">{{hp.diemhp}}</td>
-                                <td class="text-center">{{hp.tichluy ? "*" : ''}}</td>
+                                <th scope="row">{{ index + 1 }}</th>
+                                <td>{{ hp.mahp }}</td>
+                                <td>{{ hp.tenhp }}</td>
+                                <td class="text-center">{{ hp.dieukien ? "x" : '' }}</td>
+                                <td class="text-center">{{ hp.nhomhp }}</td>
+                                <td class="text-center">{{ hp.sotc }}</td>
+                                <td class="text-center">{{ hp.diemchu }}</td>
+                                <td class="text-center">{{ hp.diemhp }}</td>
+                                <td class="text-center">{{ hp.tichluy ? "*" : '' }}</td>
                                 <td>
                                     <div class="btns">
                                         <!-- <div class="btn" @click="handleClickEditHP(hp)">
@@ -454,42 +489,53 @@ export default {
                         <tbody>
                             <tr>
                                 <td>Tổng số tín chỉ tích lũy học kỳ</td>
-                                <td class="set_width">{{this.tinchiHK}}</td>
+                                <td class="set_width">{{ this.tinchiHK }}</td>
                                 <td>Ðiểm trung bình học kỳ</td>
-                                <td class="set_width">{{this.diemHK}}</td>
+                                <td class="set_width">{{ this.diemHK }}</td>
                             </tr>
                             <tr>
                                 <td>Tổng số tín chỉ tích lũy</td>
-                                <td class="set_width">{{this.tinchiTL}}</td>
+                                <td class="set_width">{{ this.tinchiTL }}</td>
                                 <td>Ðiểm trung bình tích lũy</td>
-                                <td class="set_width">{{this.diemTL}}</td>
+                                <td class="set_width">{{ this.diemTL }}</td>
                             </tr>
                             <tr v-if="this.hideHK3">
                                 <td></td>
                                 <td></td>
                                 <td>Ðiểm rèn luyện</td>
-                                <td class="set_width">{{this.showDRL}}</td>
+                                <td class="set_width">{{ this.showDRL }}</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
                 <div class="button_add">
-                    <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#themHPModal">
-                        Thêm môn học vào học kì
-                        {{this.currentHocKi == 3 ? "Hè" :
-                        this.currentHocKi}} năm học
-                        {{this.arrayYear[this.currentYear]}} -
-                        {{this.arrayYear[this.currentYear]+1}}
-                    </button>
-                    <button v-if="this.hideHK3" type="button" class="btn" data-bs-toggle="modal"
-                        data-bs-target="#capnhatdiemrenluyenModal">
-                        Cập nhật điểm rèn luyện cho học kì {{ this.currentHocKi == 3 ? "Hè" :
-                        this.currentHocKi}} năm học
-                        {{this.arrayYear[this.currentYear]}} -
-                        {{this.arrayYear[this.currentYear]+1}}
-                    </button>
+                    <div>
+                        <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#themHPModal">
+                            Thêm môn học vào học kì
+                            {{ this.currentHocKi == 3 ? "Hè" :
+                            this.currentHocKi
+                            }} năm học
+                            {{ this.arrayYear[this.currentYear] }} -
+                            {{ this.arrayYear[this.currentYear] + 1 }}
+                        </button>
+                    </div>
+                    <div>
+                        <button v-if="this.hideHK3" type="button" class="btn" data-bs-toggle="modal"
+                            data-bs-target="#capnhatdiemrenluyenModal">
+                            Cập nhật điểm rèn luyện cho học kì {{ this.currentHocKi == 3 ? "Hè" :
+                            this.currentHocKi
+                            }} năm học
+                            {{ this.arrayYear[this.currentYear] }} -
+                            {{ this.arrayYear[this.currentYear] + 1 }}
+                        </button>
+                    </div>
                 </div>
+                <!-- <div class="button_add">
+                    <div>
+                        <button @click="exportListHP()">Xuất dữ liệu ra file excel</button>
+                    </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -557,6 +603,12 @@ export default {
                 display: flex;
                 justify-content: center;
                 gap: 50px;
+
+                div {
+                    width: 50%;
+                    margin: 10px;
+                    text-align: center;
+                }
 
                 button {
                     border: none;

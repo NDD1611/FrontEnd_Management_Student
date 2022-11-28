@@ -140,6 +140,22 @@ let getDiemRL = (data) => {
     let res = axios.post('/getdiemrenluyen', data)
     return res
 }
+let addHD = (data) => {
+    let res = axios.post('/addHD', data)
+    return res
+}
+let getHD = (masv) => {
+    let res = axios.post('/getHD', { masv })
+    return res
+}
+let editHD = (data) => {
+    let res = axios.post('/editHD', data)
+    return res
+}
+let delHD = (data) => {
+    let res = axios.post('/delHD', data)
+    return res
+}
 export default {
     createOneSv,
     getAllStudentLop,
@@ -161,5 +177,9 @@ export default {
     getAllAnnounce,
     getInfoCVHTFromMaLop,
     addDRL,
-    getDiemRL
+    getDiemRL,
+    addHD,
+    getHD,
+    editHD,
+    delHD
 }

@@ -60,6 +60,10 @@ export default {
             let monthNames = ["January", "February", "March", "April", "May", "June",
                 "July", "August", "September", "October", "November", "December"
             ];
+
+            listAn.sort(function (a, b) {
+                return b.timepost - a.timepost
+            });
             for (let i = 0; i < listAn.length; i++) {
                 let announce = listAn[i]
                 let str = parseInt(announce.timepost)
@@ -95,15 +99,15 @@ export default {
 <template>
     <div class="content_notice_broad">
         <div class="oneAnnounce" v-for="(announce, index ) in this.listannounce">
-            <h6>{{announce.date}}</h6>
-            <h6 class="name">{{announce.name}}
+            <h6>{{ announce.date }}</h6>
+            <h6 class="name">{{ announce.name }}
                 <span class="cvht_check" v-if="announce.isCV">
                     CVHT
                     <i v-if="announce.isCV ? true : false" class="fa-solid fa-check"></i>
                 </span>
-                <span v-if="announce.isStu">- {{announce.maso}}</span>
+                <span v-if="announce.isStu">- {{ announce.maso }}</span>
             </h6>
-            <p class="detail">{{announce.detail}}</p>
+            <p class="detail">{{ announce.detail }}</p>
         </div>
     </div>
 </template>

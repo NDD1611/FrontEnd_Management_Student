@@ -10,9 +10,11 @@ export default {
             cv3: false,
             cv4: false,
             cv5: false,
+            cv6: false,
             sv1: false,
             sv2: false,
             sv3: false,
+            sv4: false,
             thongbao: false
         }
     },
@@ -133,10 +135,10 @@ export default {
         </div>
         <div class="borderUnder" :class="this.isShowText == false ? 'justify_content_center' : ''">
             <i class="fa-solid fa-house"></i>
-            <router-link to="/" class="home_js hover_color" :class="this.trangchu ==true ? 'current_menu' : ''"
+            <router-link to="/" class="home_js hover_color" :class="this.trangchu == true ? 'current_menu' : ''"
                 @click="clickCurrentMenu('trangchu')">
                 <div v-if="this.isShowText">
-                    Trang Chủ
+                    Trang chủ
                 </div>
             </router-link>
         </div>
@@ -144,45 +146,52 @@ export default {
             @click="handleClickCVHT()">
             <i class="fa-solid fa-user-tie"></i>
             <div v-if="this.isShowText">
-                Cố Vấn
+                Cố vấn
             </div>
             <i class="fa-solid fa-angle-down iconRight" v-if="this.isShowText"></i>
         </div>
 
         <div class="drop_down_cvht dropDown" v-if="this.isShowDropDownCVHT">
             <div class="link_to">
-                <router-link to="/cvht/viewinfo" class="listSv_js hover_color" :class="this.cv1  ? 'current_menu' : ''"
+                <router-link to="/cvht/viewinfo" class="listSv_js hover_color" :class="this.cv1 ? 'current_menu' : ''"
                     @click="clickCurrentMenu('cv1')">
                     <i class="fa-solid fa-chevron-right"></i>
                     Thông tin
                 </router-link>
             </div>
             <div class="link_to">
-                <router-link to="/cvht/updateinfo" class="listSv_js hover_color"
-                    :class="this.cv2  ? 'current_menu' : ''" @click="clickCurrentMenu('cv2')">
+                <router-link to="/cvht/updateinfo" class="listSv_js hover_color" :class="this.cv2 ? 'current_menu' : ''"
+                    @click="clickCurrentMenu('cv2')">
                     <i class="fa-solid fa-chevron-right"></i>
                     Cập nhật thông tin
                 </router-link>
             </div>
             <div class="link_to">
-                <router-link to="/cvht/addclass" class="listSv_js hover_color" :class="this.cv3  ? 'current_menu' : ''"
+                <router-link to="/cvht/addclass" class="listSv_js hover_color" :class="this.cv3 ? 'current_menu' : ''"
                     @click="clickCurrentMenu('cv3')">
                     <i class="fa-solid fa-chevron-right"></i>
-                    Danh Sách Lớp Học
+                    Danh sách lớp học
                 </router-link>
             </div>
             <div class="link_to">
-                <router-link to="/cvht/list" class="listSv_js hover_color" :class="this.cv4  ? 'current_menu' : ''"
+                <router-link to="/cvht/list" class="listSv_js hover_color" :class="this.cv4 ? 'current_menu' : ''"
                     @click="clickCurrentMenu('cv4')">
                     <i class="fa-solid fa-chevron-right"></i>
-                    Danh Sách Sinh Viên
+                    Danh sách sinh viên
                 </router-link>
             </div>
             <div class="link_to">
-                <router-link to="/cvht/addSv" class="addnew_js hover_color" :class="this.cv5  ? 'current_menu' : ''"
+                <router-link to="/cvht/addSv" class="addnew_js hover_color" :class="this.cv5 ? 'current_menu' : ''"
                     @click="clickCurrentMenu('cv5')">
                     <i class="fa-solid fa-chevron-right"></i>
-                    Thêm Mới Sinh Viên
+                    Thêm mới sinh viên
+                </router-link>
+            </div>
+            <div class="link_to">
+                <router-link to="/importlisthponsv" class="addnew_js hover_color"
+                    :class="this.cv6 ? 'current_menu' : ''" @click="clickCurrentMenu('cv6')">
+                    <i class="fa-solid fa-chevron-right"></i>
+                    Nhập điểm cho sinh viên
                 </router-link>
             </div>
         </div>
@@ -192,49 +201,59 @@ export default {
             @click="handleClickSV('drop_down_sv')">
             <i class="fa-solid fa-user-tie"></i>
             <div v-if="this.isShowText">
-                Sinh Viên
+                Sinh viên
             </div>
             <i class="fa-solid fa-angle-down iconRight" v-if="this.isShowText"></i>
         </div>
 
         <div class="drop_down_cvht dropDown" v-if="this.isShowDropDownSV">
             <div class="link_to hover_color">
-                <router-link to="/sv/view" class="listSv_js hover_color" :class="this.sv1  ? 'current_menu' : ''"
-                    @click="()=>{
+                <router-link to="/sv/view" class="listSv_js hover_color" :class="this.sv1 ? 'current_menu' : ''" @click="() => {
                     clickCurrentMenu('sv1')
                     clickViewSv('listSv_js')
-                    }">
+                }">
                     <i class="fa-solid fa-chevron-right"></i>
-                    Thông Tin
+                    Thông tin
                 </router-link>
             </div>
             <div class="link_to hover_color">
-                <router-link to="/sv/editsv" class="addnew_js hover_color" :class="this.sv2  ? 'current_menu' : ''"
-                    @click="()=>{
-                    clickCurrentMenu('sv2')
-                    clickUpdateSv('listSv_js')
+                <router-link to="/sv/editsv" class="addnew_js hover_color" :class="this.sv2 ? 'current_menu' : ''"
+                    @click="() => {
+                        clickCurrentMenu('sv2')
+                        clickUpdateSv('listSv_js')
                     }">
                     <i class="fa-solid fa-chevron-right"></i>
-                    Cập Nhật Thông Tin
+                    Cập nhật thông tin
                 </router-link>
             </div>
             <div class="link_to hover_color">
-                <router-link to="/sv/capnhatdiem" class="addnew_js hover_color" :class="this.sv3  ? 'current_menu' : ''"
-                    @click="()=>{
-                    clickCurrentMenu('sv3')
-                    xemDiemSV()
-                    clickUpdateSv('listSv_js')
+                <router-link to="/sv/capnhatdiem" class="addnew_js hover_color" :class="this.sv3 ? 'current_menu' : ''"
+                    @click="() => {
+                        clickCurrentMenu('sv3')
+                        xemDiemSV()
+                        clickUpdateSv('listSv_js')
                     }">
                     <i class="fa-solid fa-chevron-right"></i>
-                    Xem Điểm Học Kì
+                    Xem điểm học Kì
+                </router-link>
+            </div>
+            <div class="link_to hover_color">
+                <router-link to="/sv/capnhathoatdong" class="addnew_js hover_color"
+                    :class="this.sv4 ? 'current_menu' : ''" @click="() => {
+                        clickCurrentMenu('sv4')
+                        xemDiemSV()
+                        clickUpdateSv('listSv_js')
+                    }">
+                    <i class="fa-solid fa-chevron-right"></i>
+                    Hoạt động ngoại khóa
                 </router-link>
             </div>
         </div>
         <router-link to="/announce" class="borderUnder underline_node hover_color" @click="clickCurrentMenu('thongbao')"
             :class="this.isShowText == false ? 'justify_content_center' : ''">
             <i class="fa-solid fa-bullhorn"></i>
-            <div v-if="this.isShowText" :class="this.thongbao ? 'current_menu':''">
-                Thông Báo
+            <div v-if="this.isShowText" :class="this.thongbao ? 'current_menu' : ''">
+                Thông báo
             </div>
         </router-link>
 
@@ -242,7 +261,7 @@ export default {
             @click="handleClickAccount('drop_down_account')">
             <i class="fa-solid fa-gear"></i>
             <div v-if="this.isShowText">
-                Tài Khoản
+                Tài khoản
             </div>
             <i class="fa-solid fa-angle-down iconRight" v-if="this.isShowText"></i>
         </div>
@@ -257,7 +276,7 @@ export default {
             <div class="link_to">
                 <div class="addnew_js hover_color" @click="logOut()">
                     <i class="fa-solid fa-chevron-right"></i>
-                    Đăng Xuất
+                    Đăng xuất
                 </div>
             </div>
         </div>

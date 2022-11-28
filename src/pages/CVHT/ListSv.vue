@@ -91,9 +91,14 @@ export default {
         },
         xemDiemSV(sv) {
             let masv = sv.masv
-            console.log(masv)
+            // console.log(masv)
             sessionStorage.setItem('masvDiemHK', JSON.stringify(masv))
             this.$router.replace({ path: "/sv/capnhatdiem" })
+        },
+        xemHDSV(sv) {
+            let masv = sv.masv
+            sessionStorage.setItem('addHD', JSON.stringify(masv))
+            this.$router.replace({ path: "/sv/capnhathoatdong" })
         }
     }
 }
@@ -110,7 +115,7 @@ export default {
                 Không Có Dữ Liệu
             </div>
             <div class="content" v-if="this.coData">
-                <div class="header_right">Danh Sách Sinh Viên Lớp {{this.lists[0].malop}}</div>
+                <div class="header_right">Danh Sách Sinh Viên Lớp {{ this.lists[0].malop }}</div>
                 <table class="table">
                     <thead>
                         <th scope="col" class="text-center">STT</th>
@@ -124,7 +129,7 @@ export default {
                     </thead>
                     <tbody class="table-group-divider">
                         <tr v-for="(sv, index) in this.lists" :class="index % 2 == 0 ? 'black' : 'white'">
-                            <td class="text-center">{{ index+1 }}</td>
+                            <td class="text-center">{{ index + 1 }}</td>
                             <td class="text-center">{{ sv.masv }}</td>
                             <td class="text-center">{{ sv.name }}</td>
                             <td class="text-center">{{ sv.gender }}</td>
@@ -145,6 +150,9 @@ export default {
                                     </div>
                                     <div class="btn" @click="xemDiemSV(sv)">
                                         <i class="fa-solid fa-square-poll-horizontal"></i>
+                                    </div>
+                                    <div class="btn" @click="xemHDSV(sv)">
+                                        <i class="fa-solid fa-handshake-angle"></i>
                                     </div>
                                 </div>
                             </td>
