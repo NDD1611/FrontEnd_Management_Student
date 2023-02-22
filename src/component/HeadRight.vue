@@ -10,30 +10,35 @@ export default {
         }
     },
     async created() {
-        let infoLogin = JSON.parse(sessionStorage.getItem('infoLogin'))
-        this.nameuser = infoLogin.name
-        let role = infoLogin.role
-        if (role == "teacher") {
-            let macb = infoLogin.macb
-            let res = await Service.getAllClass(macb)
-            if (res) {
-                this.listClass = res.data
-                let current = JSON.parse(sessionStorage.getItem('currentClass'))
-                if (current) {
-                    this.currentClass = current
-                } else {
-                    this.currentClass = res.data[0].malop
-                }
-            }
-        }
-        if (role == "student") {
-            this.isShowHead = false
-        }
+    },
+    beforeMount() {
+        this.getData()
     },
     methods: {
         handleChange() {
             sessionStorage.setItem('currentClass', JSON.stringify(this.currentClass))
             this.$emit('changeClass', this.currentClass)
+        },
+        async getData() {
+            let infoLogin = JSON.parse(sessionStorage.getItem('infoLogin'))
+            this.nameuser = infoLogin.name
+            let role = infoLogin.role
+            if (role == "teacher") {
+                let macb = infoLogin.macb
+                let res = await Service.getAllClass(macb)
+                if (res) {
+                    this.listClass = res.data
+                    let current = JSON.parse(sessionStorage.getItem('currentClass'))
+                    if (current) {
+                        this.currentClass = current
+                    } else {
+                        this.currentClass = res.data[0].malop
+                    }
+                }
+            }
+            if (role == "student") {
+                this.isShowHead = false
+            }
         }
     }
 }
@@ -45,7 +50,7 @@ export default {
         <div>
             <label>Lớp: </label>
             <select name="lop" id="choose_lop" v-model="this.currentClass" @change="handleChange()">
-                <option v-for="lop, index in this.listClass" :value="lop.malop">{{lop.malop}}
+                <option v-for="lop, index in this.listClass" :value="lop.malop">{{ lop.malop }}
                 </option>
             </select>
         </div>

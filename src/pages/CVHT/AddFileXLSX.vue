@@ -44,6 +44,7 @@ export default {
         async handleClickSubmitFile() {
             try {
                 let malop = this.currentClass
+                let check = 1
                 // console.log(malop)
                 if (this.dataFile.length) {
                     // console.log(this.dataFile)
@@ -77,15 +78,27 @@ export default {
                         }
                         svObj.malop = malop
                         if (svObj.masv) {
-                            await Service.createOneSv(svObj)
+                            let result = await Service.createOneSv(svObj)
+                            console.log(result)
+                            if (result.errCode != 0) {
+                                check = 0
+                            }
                         }
                     }
                 }
-                let infoToast = {
-                    type: "success",
-                    mes: "Thêm Danh Sách Thành Công"
+                if (check == 1) {
+                    let infoToast = {
+                        type: "success",
+                        mes: "Thêm Danh Sách Thành Công"
+                    }
+                    this.showToast(infoToast)
+                } else {
+                    let infoToast = {
+                        type: "Thất bại",
+                        mes: "Thêm Danh Sách thất bại"
+                    }
+                    this.showToast(infoToast)
                 }
-                this.showToast(infoToast)
             } catch (err) {
                 let infoToast = {
                     type: "error",
@@ -145,7 +158,7 @@ export default {
                         <div class="malop">
                             <label for="malop">Chọn Lớp Muốn Thêm Sinh Viên Vào::</label>
                             <select v-model="this.currentClass" id="malop">
-                                <option v-for="lop in this.listClass" :value="lop.malop" selected>{{lop.malop}}
+                                <option v-for="lop in this.listClass" :value="lop.malop" selected>{{ lop.malop }}
                                 </option>
                             </select>
                         </div>

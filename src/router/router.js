@@ -30,7 +30,6 @@ const routes = [
     { path: "/cvht/addclass", component: AddClass },
     { path: "/cvht/editsv", component: EditSv },
     { path: "/login", component: Login },
-    { path: "/admin/createaccount", component: CreateAccountTeach },
     { path: "/sv/editsv", component: EditSvLogin },
     { path: "/sv/view", component: ViewSvLogin },
     { path: "/sv/capnhatdiem", component: CapNhatDiem },
@@ -38,6 +37,7 @@ const routes = [
     { path: "/changepass", component: ChangePass },
     { path: "/importlisthponsv", component: AddListHPOneSv },
     { path: "/sv/capnhathoatdong", component: HoatDong },
+    { path: "/admin/createaccount", component: CreateAccountTeach },
 
     // { path: '/:pathMatch(.*)*', component: Notfound }
 ]

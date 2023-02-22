@@ -29,23 +29,25 @@ export default {
     },
     async beforeMount() {
         let infoLogin = JSON.parse(sessionStorage.getItem('infoLogin'))
-        if (infoLogin.role == 'teacher') {
-            let macb = infoLogin.macb
-            let res = await Service.getAllClass(macb)
-            if (res) {
-                this.listClass = res.data
-                let current = JSON.parse(sessionStorage.getItem('currentClass'))
-                if (current) {
-                    this.currentClass = current
-                } else {
-                    this.currentClass = res.data[0].malop
+        if (infoLogin) {
+            if (infoLogin.role == 'teacher') {
+                let macb = infoLogin.macb
+                let res = await Service.getAllClass(macb)
+                if (res) {
+                    this.listClass = res.data
+                    let current = JSON.parse(sessionStorage.getItem('currentClass'))
+                    if (current) {
+                        this.currentClass = current
+                    } else {
+                        this.currentClass = res.data[0].malop
+                    }
+                    sessionStorage.setItem('currentClass', JSON.stringify(this.currentClass))
+                    sessionStorage.setItem('listClass', JSON.stringify(this.listClass))
                 }
-                sessionStorage.setItem('currentClass', JSON.stringify(this.currentClass))
-                sessionStorage.setItem('listClass', JSON.stringify(this.listClass))
             }
-        }
-        if (infoLogin.role == "student") {
-            sessionStorage.setItem('currentClass', JSON.stringify(infoLogin.malop))
+            if (infoLogin.role == "student") {
+                sessionStorage.setItem('currentClass', JSON.stringify(infoLogin.malop))
+            }
         }
 
 
@@ -139,7 +141,7 @@ export default {
                                 </div>
                             </div>
                             <div class="slsv">
-                                {{this.totalSv}}
+                                {{ this.totalSv }}
                             </div>
                         </div>
                         <div class="square bg-yellow">
@@ -149,7 +151,7 @@ export default {
                                 </div>
                             </div>
                             <div class="slsv">
-                                {{this.svNam}}
+                                {{ this.svNam }}
                             </div>
                         </div>
                         <div class="square bg-green">
@@ -159,7 +161,7 @@ export default {
                                 </div>
                             </div>
                             <div class="slsv">
-                                {{this.svNu}}
+                                {{ this.svNu }}
                             </div>
                         </div>
                         <!-- <div class="square bg-red">

@@ -55,12 +55,12 @@ export default {
             <div class="form">
                 <div class="head">
                     <div class="head_left">
-                        Cập Nhật Thông Tin Cố Vấn:
+                        Cập Nhật Thông Tin Giảng Viên:
                     </div>
                 </div>
                 <div class="info_student">
                     <div class="div_form">
-                        <label for="masv">Mã Cán Bộ:</label>
+                        <label for="masv">Mã Số:</label>
                         <input v-model="this.info.macb" type="text" placeholder="Nhập mã cán bộ..." id="masv"
                             disabled />
                     </div>

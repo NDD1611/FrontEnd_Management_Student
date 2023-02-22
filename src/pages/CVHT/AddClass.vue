@@ -44,11 +44,7 @@ export default {
                         type: "success",
                         mes: "Thêm Lớp Học Thành Công"
                     }
-                    let infoLogin = JSON.parse(sessionStorage.getItem('infoLogin'))
-                    let macb = infoLogin.macb
-                    let res = await Service.getAllClass(macb)
-                    this.listLop = res.data
-                    sessionStorage.setItem('listClass', JSON.stringify(res.data))
+                    this.getData()
                 } else {
                     let infoToast = {
                         type: "warning",
@@ -75,20 +71,26 @@ export default {
                     mes: 'Cập Nhật Thông Tin Lớp Học Thành Công'
                 }
                 this.showToast(infoToast)
-                let infoLogin = JSON.parse(sessionStorage.getItem('infoLogin'))
-                let macb = infoLogin.macb
-                let res = await Service.getAllClass(macb)
-                this.listLop = res.data
-                sessionStorage.setItem('listClass', JSON.stringify(res.data))
+                this.getData()
             }
+        },
+        async delClass(lop) {
+            let malop = lop.malop
+            let res = await Service.delClass(malop)
+            console.log("themToast")
+            this.getData()
+        },
+        async getData() {
+            let infoLogin = JSON.parse(sessionStorage.getItem('infoLogin'))
+            let macb = infoLogin.macb
+            let res = await Service.getAllClass(macb)
+            this.listLop = res.data
+            sessionStorage.setItem('listClass', JSON.stringify(res.data))
+            sessionStorage.setItem('currentClass', JSON.stringify(res.data[0].malop))
         }
     },
     async beforeMount() {
-        let infoLogin = JSON.parse(sessionStorage.getItem('infoLogin'))
-        let macb = infoLogin.macb
-        let res = await Service.getAllClass(macb)
-        this.listLop = res.data
-        sessionStorage.setItem('listClass', JSON.stringify(res.data))
+        this.getData()
     }
 }
 </script>
@@ -113,18 +115,18 @@ export default {
                     </thead>
                     <tbody>
                         <tr v-for="(lop, index) in this.listLop">
-                            <th scope="row">{{index+1}}</th>
-                            <td>{{lop.malop}}</td>
-                            <td>{{lop.tenlop}}</td>
-                            <td>{{lop.tenkhoa}}</td>
-                            <td>{{lop.khoahoc}}</td>
-                            <td>{{lop.namhoc}}</td>
+                            <th scope="row">{{ index + 1 }}</th>
+                            <td>{{ lop.malop }}</td>
+                            <td>{{ lop.tenlop }}</td>
+                            <td>{{ lop.tenkhoa }}</td>
+                            <td>{{ lop.khoahoc }}</td>
+                            <td>{{ lop.namhoc }}</td>
                             <td>
                                 <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#editHPModal"
                                     @click="setDataEditModal(lop)">
                                     <i class="fa-solid fa-pen-to-square btn_edit"></i>
                                 </button>
-                                <div class="btn">
+                                <div class="btn" @click="delClass(lop)">
                                     <i class="fa-solid fa-trash-can btn_delete"></i>
                                 </div>
                             </td>

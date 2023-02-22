@@ -52,7 +52,7 @@ export default {
                 <div class="detail">
                     <div class="head">
                         <diV>
-                            Thông Tin Giáo Viên
+                            Thông Tin Giảng Viên
                         </diV>
                         <!-- <div class="quay_lai" @click="handleQ()">
                             Quay Lại
@@ -60,7 +60,7 @@ export default {
                     </div>
                     <div class="line_detail">
                         <div class="span1">
-                            Mã Số Giáo Viên:
+                            Mã Số:
                         </div>
                         <div class="span2">
                             {{ this.dataV.macb }}

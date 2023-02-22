@@ -22,6 +22,7 @@ export default {
                 masv: this.masv,
                 password: this.password
             }
+            console.log("login")
             let res = await Services.Login(info)
             console.log(res)
             if (res) {

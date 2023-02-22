@@ -29,13 +29,20 @@ export default {
             masv: '',
             diemRL: '',
             showDRL: '',
-            hideHK3: true
+            hideHK3: true,
+            roleIsStudent: false
         }
     },
     components: {
         Menu
     },
     async beforeMount() {
+        let infoLogin = JSON.parse(sessionStorage.getItem('infoLogin'))
+        let role = infoLogin.role
+        if (role == 'student') {
+            this.roleIsStudent = true
+        }
+
         let masv = JSON.parse(sessionStorage.getItem("masvDiemHK"))
         let infoSV = await Service.getFullInfoSv(masv)
         let infoSVCurrent = infoSV.data
@@ -385,7 +392,7 @@ export default {
                                 <td class="text-center">{{ hp.diemchu }}</td>
                                 <td class="text-center">{{ hp.diemhp }}</td>
                                 <td class="text-center">{{ hp.tichluy ? "*" : '' }}</td>
-                                <td>
+                                <td v-if="!this.roleIsStudent">
                                     <div class="btns">
                                         <!-- <div class="btn" @click="handleClickEditHP(hp)">
                                         <i class="fa-solid fa-pen-to-square btn_edit"></i>
@@ -509,12 +516,12 @@ export default {
                     </table>
                 </div>
 
-                <div class="button_add">
+                <div class="button_add" v-if="!this.roleIsStudent">
                     <div>
                         <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#themHPModal">
                             Thêm môn học vào học kì
                             {{ this.currentHocKi == 3 ? "Hè" :
-                            this.currentHocKi
+                                    this.currentHocKi
                             }} năm học
                             {{ this.arrayYear[this.currentYear] }} -
                             {{ this.arrayYear[this.currentYear] + 1 }}
@@ -524,7 +531,7 @@ export default {
                         <button v-if="this.hideHK3" type="button" class="btn" data-bs-toggle="modal"
                             data-bs-target="#capnhatdiemrenluyenModal">
                             Cập nhật điểm rèn luyện cho học kì {{ this.currentHocKi == 3 ? "Hè" :
-                            this.currentHocKi
+                                    this.currentHocKi
                             }} năm học
                             {{ this.arrayYear[this.currentYear] }} -
                             {{ this.arrayYear[this.currentYear] + 1 }}

@@ -41,6 +41,7 @@ export default {
             <select name="role" id="role" v-model="this.role">
                 <option value="admin">Admin</option>
                 <option value="teacher">Teacher</option>
+                <option value="student">Student</option>
             </select>
             <button @click="createAccount()">Tạo Tài Khoản</button>
         </div>

@@ -7,7 +7,7 @@ import ContentRight from "./ContentRight.vue"
 export default {
     data() {
         return {
-            title: '',
+            title: 'gdgdfgd',
             detail: '',
             listannounce: [],
             rerender: true
@@ -83,10 +83,10 @@ export default {
             <div class="content_right">
                 <div class="form_create">
                     <div class="head_form_create">Tạo Thông Báo</div>
-                    <div class="col-md-12">
+                    <!-- <div class="col-md-12">
                         <label for="title" class="form-label">Tiêu Đề</label>
                         <input type="text" class="form-control" id="title" v-model="this.title">
-                    </div>
+                    </div> -->
                     <div class="col-md-12">
                         <label for="detail" class="form-label">Mô Tả </label>
                         <input type="text" class="form-control" id="detail" v-model="this.detail">

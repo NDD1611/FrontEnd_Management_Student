@@ -91,7 +91,6 @@ export default {
         },
         xemDiemSV(sv) {
             let masv = sv.masv
-            // console.log(masv)
             sessionStorage.setItem('masvDiemHK', JSON.stringify(masv))
             this.$router.replace({ path: "/sv/capnhatdiem" })
         },
@@ -99,6 +98,16 @@ export default {
             let masv = sv.masv
             sessionStorage.setItem('addHD', JSON.stringify(masv))
             this.$router.replace({ path: "/sv/capnhathoatdong" })
+        },
+        handleLonToBe() {
+            this.lists.sort(function (a, b) {
+                return b.diemtb - a.diemtb
+            });
+        },
+        handleBeToLon() {
+            this.lists.sort(function (a, b) {
+                return a.diemtb - b.diemtb
+            });
         }
     }
 }
@@ -124,7 +133,14 @@ export default {
                         <th scope="col" class="text-center">Giới Tính</th>
                         <th scope="col" class="text-center">Ngày Sinh</th>
                         <th scope="col" class="text-center">Địa Chỉ</th>
-                        <th scope="col" class="text-center">Điểm TB</th>
+                        <th scope="col" class="text-center dropdown">
+                            Điểm TB
+                            <i class="fa-solid fa-caret-down"></i>
+                            <div class="dropdown_item">
+                                <ul @click="handleLonToBe()">lớn đến bé</ul>
+                                <ul @click="handleBeToLon()">bé đến lớn</ul>
+                            </div>
+                        </th>
                         <th scope="col" class="text-center">Tín Chỉ</th>
                     </thead>
                     <tbody class="table-group-divider">
@@ -187,6 +203,35 @@ export default {
             }
 
             table {
+                .dropdown {
+                    position: relative;
+
+                    .dropdown_item {
+                        display: none;
+                        position: absolute;
+                        background-color: #fff;
+                        padding: 0 !important;
+
+                        ul {
+                            padding: 5px 20px !important;
+                            text-align: center;
+                            cursor: pointer;
+                            margin: 0px !important;
+
+                            &:hover {
+                                background-color: #ccc;
+                            }
+                        }
+                    }
+
+                    &:hover {
+                        .dropdown_item {
+                            display: block;
+                        }
+                    }
+                }
+
+
                 .column_8 {
                     width: 250px;
 

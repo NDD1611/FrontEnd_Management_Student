@@ -10,7 +10,8 @@ export default {
             namThamGia: '',
             hocKiThamGia: 1,
             rerender: true,
-            dataEditModal: {}
+            dataEditModal: {},
+            showButton: true
         }
     },
     components: {
@@ -20,6 +21,7 @@ export default {
         let infoLogin = JSON.parse(sessionStorage.getItem('infoLogin'))
         if (infoLogin.role == 'student') {
             sessionStorage.setItem('addHD', JSON.stringify(infoLogin.masv))
+            this.showButton = false
         }
         this.getHD()
     },
@@ -79,7 +81,7 @@ export default {
                             <td>{{ hd.tenHD }}</td>
                             <td>{{ hd.namhoc }}</td>
                             <td>{{ hd.hocki }}</td>
-                            <td>
+                            <td v-if="this.showButton">
                                 <button type="button" class="btn hover_brown" data-bs-toggle="modal"
                                     data-bs-target="#editHPModal" @click="setDataEditModal(hd)">
                                     <i class="fa-solid fa-pen-to-square btn_edit"></i>
@@ -93,7 +95,7 @@ export default {
                 </table>
             </div>
 
-            <div class="text-center">
+            <div class="text-center" v-if="this.showButton">
                 <button type="button" class="btn yellow_bg" data-bs-toggle="modal" data-bs-target="#addHDModal">
                     Thêm mới hoạt động
                 </button>

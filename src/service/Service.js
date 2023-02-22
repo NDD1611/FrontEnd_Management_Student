@@ -120,6 +120,10 @@ let editLop = async (data) => {
     let res = await axios.post("/cvht/editlop", data)
     return res
 }
+let delClass = async (malop) => {
+    let res = await axios.post("/cvht/dellop", { malop })
+    return res
+}
 let createAnnounce = async (data) => {
     let res = await axios.post("/createannouce", data)
     return res
@@ -173,6 +177,7 @@ export default {
     getFullHP,
     getAllClass,
     editLop,
+    delClass,
     createAnnounce,
     getAllAnnounce,
     getInfoCVHTFromMaLop,
@@ -181,5 +186,6 @@ export default {
     addHD,
     getHD,
     editHD,
-    delHD
+    delHD,
+
 }
