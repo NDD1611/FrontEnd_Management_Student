@@ -53,7 +53,6 @@ export default {
 </script>
     
 <template>
-
     <div class="bg_main_color">
         <div id="layoutAuthentication">
             <div id="layoutAuthentication_content">

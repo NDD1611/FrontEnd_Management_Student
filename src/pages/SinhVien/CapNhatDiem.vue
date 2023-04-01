@@ -108,7 +108,6 @@ export default {
                 masv: infoSVCurrent.masv
             }
             let res = await Service.getDiemHP(data)
-            // console.log(res)
             if (res.length == 0) {
                 this.isShowTable = false
             } else {
@@ -126,6 +125,7 @@ export default {
             let curHK = parseInt(this.currentHocKi)
             let masv = this.infoSVCurrent.masv
             let fullHP = await Service.getFullHP(masv)
+            console.log("===============")
             this.listFullHP = fullHP
             let tongdiem = 0
             for (let hp of fullHP) {
@@ -153,7 +153,6 @@ export default {
                 }
             }
             this.diemHK = (tongdiem / this.tinchiHK).toFixed(2)
-
             let tongtc = 0
             tongdiem = 0
             for (let hp of fullHP) {
@@ -315,7 +314,6 @@ export default {
                 hocki: parseInt(this.currentHocKi)
             }
             let res = await Service.getDiemRL(data)
-            // console.log(res)
             if (res) {
                 if (res.data) {
                     this.showDRL = res.data.diemRL
@@ -394,10 +392,7 @@ export default {
                                 <td class="text-center">{{ hp.tichluy ? "*" : '' }}</td>
                                 <td v-if="!this.roleIsStudent">
                                     <div class="btns">
-                                        <!-- <div class="btn" @click="handleClickEditHP(hp)">
-                                        <i class="fa-solid fa-pen-to-square btn_edit"></i>
-                                    </div> -->
-                                        <div class="btn" @click="handleDeleteHP(hp)">
+                                        <div class="btn" @click="(e) => handleDeleteHP(hp)">
                                             <i class="fa-solid fa-trash-can btn_delete"></i>
                                         </div>
                                     </div>
@@ -415,8 +410,7 @@ export default {
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h1 class="modal-title fs-5" id="exampleModalLabel">Thông Tin Học Phần</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
                                 <form>
@@ -426,27 +420,23 @@ export default {
                                     </div>
                                     <div class="mb-3">
                                         <label for="recipient-name" class="col-form-label">Tên Học Phần:</label>
-                                        <input type="text" class="form-control" id="recipient-name"
-                                            v-model="this.tenhp">
+                                        <input type="text" class="form-control" id="recipient-name" v-model="this.tenhp">
                                     </div>
                                     <div class="mb-3">
                                         <label for="recipient-name" class="col-form-label">Số Tín Chỉ Học Phần:</label>
-                                        <input type="number" class="form-control" id="recipient-name"
-                                            v-model="this.sotc">
+                                        <input type="number" class="form-control" id="recipient-name" v-model="this.sotc">
                                     </div>
                                     <div class="mb-3">
                                         <label for="recipient-name" class="col-form-label">Điểm Học Phần:</label>
-                                        <input type="text" class="form-control" id="recipient-name"
-                                            v-model="this.diemhp">
+                                        <input type="text" class="form-control" id="recipient-name" v-model="this.diemhp">
                                     </div>
                                     <div class="mb-3">
                                         <label for="recipient-name" class="col-form-label">Nhóm Học Phần:</label>
-                                        <input type="text" class="form-control" id="recipient-name"
-                                            v-model="this.nhomhp">
+                                        <input type="text" class="form-control" id="recipient-name" v-model="this.nhomhp">
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value=""
-                                            v-model="this.dieukienhp" id="flexCheckDefault">
+                                        <input class="form-check-input" type="checkbox" value="" v-model="this.dieukienhp"
+                                            id="flexCheckDefault">
                                         <label class="form-check-label" for="flexCheckDefault">
                                             Là học phần điều kiện
                                         </label>
@@ -470,15 +460,13 @@ export default {
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h1 class="modal-title fs-5" id="exampleModalLabel">Thông Tin Học Phần</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
                                 <form>
                                     <div class="mb-3">
                                         <label for="recipient-name" class="col-form-label">Điểm rèn luyện:</label>
-                                        <input type="number" class="form-control" id="recipient-name"
-                                            v-model="this.diemRL">
+                                        <input type="number" class="form-control" id="recipient-name" v-model="this.diemRL">
                                     </div>
                                 </form>
                             </div>
@@ -521,7 +509,7 @@ export default {
                         <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#themHPModal">
                             Thêm môn học vào học kì
                             {{ this.currentHocKi == 3 ? "Hè" :
-                                    this.currentHocKi
+                                this.currentHocKi
                             }} năm học
                             {{ this.arrayYear[this.currentYear] }} -
                             {{ this.arrayYear[this.currentYear] + 1 }}
@@ -531,18 +519,13 @@ export default {
                         <button v-if="this.hideHK3" type="button" class="btn" data-bs-toggle="modal"
                             data-bs-target="#capnhatdiemrenluyenModal">
                             Cập nhật điểm rèn luyện cho học kì {{ this.currentHocKi == 3 ? "Hè" :
-                                    this.currentHocKi
+                                this.currentHocKi
                             }} năm học
                             {{ this.arrayYear[this.currentYear] }} -
                             {{ this.arrayYear[this.currentYear] + 1 }}
                         </button>
                     </div>
                 </div>
-                <!-- <div class="button_add">
-                    <div>
-                        <button @click="exportListHP()">Xuất dữ liệu ra file excel</button>
-                    </div>
-                </div> -->
             </div>
         </div>
     </div>

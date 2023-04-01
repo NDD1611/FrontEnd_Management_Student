@@ -1,5 +1,4 @@
 <script>
-
 import Toast from "./component/Toast.vue"
 import '/node_modules/bootstrap/dist/js/bootstrap.min.js'
 

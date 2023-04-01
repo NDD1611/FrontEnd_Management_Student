@@ -54,9 +54,6 @@ export default {
                 </option>
             </select>
         </div>
-        <!-- <div class="right">
-            Xin Chào, {{this.nameuser}}
-        </div> -->
     </div>
 </template>
 

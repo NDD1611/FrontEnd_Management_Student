@@ -1,3 +1,4 @@
+
 <script>
 import Menu from "../../component/Menu.vue"
 import * as XLSX from 'xlsx/xlsx.mjs';
@@ -138,16 +139,16 @@ export default {
                                 <th>tinchi</th>
                             </tr>
                             <!-- <tr>
-                                <th>masv</th>
-                                <th>name</th>
-                                <th>date</th>
-                                <th>gender</th>
-                                <th>phone</th>
-                                <th>email</th>
-                                <th>address</th>
-                                <th>diemtb</th>
-                                <th>tinchi</th>
-                            </tr> -->
+                                        <th>masv</th>
+                                        <th>name</th>
+                                        <th>date</th>
+                                        <th>gender</th>
+                                        <th>phone</th>
+                                        <th>email</th>
+                                        <th>address</th>
+                                        <th>diemtb</th>
+                                        <th>tinchi</th>
+                                    </tr> -->
                         </table>
                     </div>
                     <div class="foot">

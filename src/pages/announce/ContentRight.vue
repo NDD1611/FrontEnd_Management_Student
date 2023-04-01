@@ -1,7 +1,7 @@
 <script>
 import Menu from "../../component/Menu.vue"
 import HeadRight from "../../component/HeadRight.vue"
-import { mapGetters, mapMutations } from 'vuex'
+import { mapMutations } from 'vuex'
 import Service from "../../service/Service"
 export default {
     data() {

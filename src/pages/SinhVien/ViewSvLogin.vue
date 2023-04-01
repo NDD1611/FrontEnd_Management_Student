@@ -56,9 +56,6 @@ export default {
                         <diV>
                             Thông Tin Sinh Viên
                         </diV>
-                        <!-- <div class="quay_lai" @click="handleQ()">
-                            Quay Lại
-                        </div> -->
                     </div>
                     <div class="line_detail">
                         <div class="span1">

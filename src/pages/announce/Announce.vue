@@ -20,18 +20,6 @@ export default {
     },
     methods: {
         ...mapMutations(['showToast']),
-        testFunction() {
-            // let date = new Date()
-            // console.log(date.getTime())
-            // let dat = new Date(1663814434940 - 1663814034940)
-            // console.log(dat.toLocaleString())
-            // const date1 = new Date('7/13/2010');
-            // const date2 = new Date('12/15/2010');
-            // const diffTime = Math.abs(date2 - date1);
-            // const diffDays = Math.ceil(diffTime / (1000 * 60 * 60));
-            // console.log(diffTime + " milliseconds");
-            // console.log(diffDays + " days");
-        },
         async createAnnounce() {
             let infoLogin = JSON.parse(sessionStorage.getItem('infoLogin'))
             let maso
@@ -83,10 +71,6 @@ export default {
             <div class="content_right">
                 <div class="form_create">
                     <div class="head_form_create">Tạo Thông Báo</div>
-                    <!-- <div class="col-md-12">
-                        <label for="title" class="form-label">Tiêu Đề</label>
-                        <input type="text" class="form-control" id="title" v-model="this.title">
-                    </div> -->
                     <div class="col-md-12">
                         <label for="detail" class="form-label">Mô Tả </label>
                         <input type="text" class="form-control" id="detail" v-model="this.detail">
